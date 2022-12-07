@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
+using SnakeV.Inputs;
 
-namespace SnakeV.Inputs
+namespace SnakeV.Utilities
 {
     public class VectorConverter : IConvertable
     {
@@ -45,7 +46,7 @@ namespace SnakeV.Inputs
 
             else if (_vertical == -1 && _player.Direction != Vector3.forward)
                 _moveDirection = Vector3.back;
-
+            
         }
 
     }

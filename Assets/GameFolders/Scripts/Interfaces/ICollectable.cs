@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SnakeV.Core.Managers
+namespace SnakeV.Abstracts
 {
-    public class GameManager : MonoBehaviour
+    public interface ICollectable 
     {
-
-
+         
+        
     }
 }
 

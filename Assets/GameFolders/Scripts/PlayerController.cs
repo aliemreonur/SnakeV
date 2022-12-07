@@ -9,11 +9,12 @@ namespace SnakeV.Core
 {
     public class PlayerController : Singleton<PlayerController>, IControllable
     {
-        [Range(0, 1)]
+        [Range(0.1f, 0.95f)]
         [SerializeField] private float _speed;
 
         private Vector3 _currentDirection;
         VectorConverter _vectorConverter;
+        WaitForSeconds _movementDelayTime;
 
         public Vector3 Direction => _currentDirection;
         public bool IsAlive { get; private set; }
@@ -28,21 +29,21 @@ namespace SnakeV.Core
         void Start()
         {
             _vectorConverter = new VectorConverter(this);
+            _movementDelayTime = new WaitForSeconds(1-_speed);
             StartCoroutine(SnakeMoveRoutine());
         }
 
         void Update()
         {
-
             _currentDirection = _vectorConverter.MoveDirection;
             _vectorConverter.NormalUpdate();
         }
 
-        IEnumerator SnakeMoveRoutine() //will add delay time raher than creating a new instance everytime.
+        IEnumerator SnakeMoveRoutine()
         {
             while(IsAlive)
             {
-                yield return new WaitForSeconds(1f);
+                yield return _movementDelayTime;
                 transform.position += _currentDirection;
             }
             
