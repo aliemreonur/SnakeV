@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
 
-namespace SnakeV.Utilities
+namespace SnakeV.Core.Managers
 {
     public class PoolManager : Singleton<PoolManager>
     {
@@ -27,9 +27,12 @@ namespace SnakeV.Utilities
             Tail tailToReturn;
             for(int i=0; i<_tailsList.Count; i++)
             {
-                if(_tailsList[i].enabled == false)
+                if(!_tailsList[i].isActiveAndEnabled)
                 {
                     tailToReturn = _tailsList[i];
+                    tailToReturn.gameObject.SetActive(true);
+                    Debug.Log("A");
+                    tailToReturn.transform.position = position;
                     return tailToReturn;
                 }
             }
@@ -44,7 +47,7 @@ namespace SnakeV.Utilities
             for(int i=0; i<spawnAmount; i++)
             {
                 Tail _spawnedPiece = Instantiate(_tailUnit, transform.position, Quaternion.identity, transform);
-                _spawnedPiece.enabled = false;
+                _spawnedPiece.gameObject.SetActive(false);
                 _tailsList.Add(_spawnedPiece);
             }
         }

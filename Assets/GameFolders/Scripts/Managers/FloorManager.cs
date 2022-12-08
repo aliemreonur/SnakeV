@@ -14,7 +14,10 @@ namespace SnakeV.Core.Managers
         [SerializeField] private int _width;
         [SerializeField] private Tile _tilePrefab; //change its type to tile rather than game object
 
-        private Tile[,] _allTiles; 
+        private Tile[,] _allTiles;
+
+        public int Height => _height;
+        public int Width => _width;
 
         private void Awake()
         {
@@ -23,7 +26,6 @@ namespace SnakeV.Core.Managers
             CreateFloor();
         }
 
-        // Start is called before the first frame update
         void Start()
         {
             PlayerController.Instance.transform.position = new Vector3(_width / 2, 0.1f, _height / 2); //bad practice to reach this on this way.

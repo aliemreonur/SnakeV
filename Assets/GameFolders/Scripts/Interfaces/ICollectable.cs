@@ -6,7 +6,7 @@ namespace SnakeV.Abstracts
 {
     public interface ICollectable 
     {
-         
+        void OnCollect();
         
     }
 }

@@ -1,11 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SnakeV.Abstracts;
+using SnakeV.Core.Managers;
 
-public class Tail : MonoBehaviour
+namespace SnakeV.Core
 {
-    public bool IsCollected;
+    public class Tail : MonoBehaviour, ICollectable
+    {
+        public bool IsCollected;
 
+        public void OnCollect()
+        {
 
+        }
+
+    }
 
 }
+
