@@ -18,6 +18,7 @@ public class SpawnManager : Singleton<SpawnManager>
     {
         _height = FloorManager.Instance.Height;
         _width = FloorManager.Instance.Width;
+        Spawn();
     }
 
     public void Spawn()

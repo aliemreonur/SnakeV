@@ -31,7 +31,6 @@ namespace SnakeV.Core.Managers
                 {
                     tailToReturn = _tailsList[i];
                     tailToReturn.gameObject.SetActive(true);
-                    Debug.Log("A");
                     tailToReturn.transform.position = position;
                     return tailToReturn;
                 }
