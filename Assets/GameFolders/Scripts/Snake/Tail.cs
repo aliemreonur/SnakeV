@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
-using SnakeV.Core.Managers;
-using SnakeV.Utilities;
 
 namespace SnakeV.Core
 {
@@ -12,7 +8,6 @@ namespace SnakeV.Core
         public Vector3 PreviousPos => _previousPos;
         private Vector3 _previousPos;
         public bool Collected { get; private set; }
-        public Vector2Int CurrentPos { get; private set; }
 
         private void Start()
         {
@@ -28,15 +23,7 @@ namespace SnakeV.Core
 
                 Collected = true;
                 PlayerController.Instance.Grow(this);
-                //transform.position = TailController.Instance.tailsList[TailController.Instance.tailsList.Count - 1].PreviousPos;
-                
-                //SpawnManager.Instance.Spawn();
             }
-        }
-
-        public void SetCurrentPos()
-        {
-            CurrentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
         }
 
         public void SetNewPos(Vector3 posToSet)
@@ -48,8 +35,6 @@ namespace SnakeV.Core
         {
             _previousPos = transform.position;
         }
-
-
     }
 
 }

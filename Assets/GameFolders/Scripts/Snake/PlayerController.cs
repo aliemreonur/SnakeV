@@ -21,7 +21,6 @@ namespace SnakeV.Core
         public Vector3 Direction => _currentDirection;
         public bool IsAlive { get; private set; }
         public Vector3 PreviousPos { get; private set; }
-        public Vector2Int CurrentPos { get; private set; }
 
         private TailController _tailController;
         private SpawnManager _spawnManager;
@@ -54,7 +53,6 @@ namespace SnakeV.Core
             {
                 SetNewPos(_currentDirection);
                 _tailController.MoveSnake();
-                CurrentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
                 yield return _movementDelayTime;
                 SetDirection();
                 SetPreviousPos();
@@ -73,14 +71,13 @@ namespace SnakeV.Core
 
         public void Death()
         {
-            Debug.Log("DEAD!");
+            IsAlive = false;
             OnPlayerDeath?.Invoke();
         }
 
         public void Grow(Tail tailToAdd)
         {
             tailToAdd.transform.position = _tailController.tailsList[_tailController.tailsList.Count - 1].PreviousPos;
-            tailToAdd.SetCurrentPos();
             _tailController.AddTail(tailToAdd);
             _spawnManager.SpawnNewFood(_tailController);
         }
@@ -89,6 +86,7 @@ namespace SnakeV.Core
         {
             _currentDirection = _vectorConverter.MoveDirection;
         }
+
     }
 
 }

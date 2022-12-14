@@ -6,7 +6,7 @@ namespace SnakeV.Core.Managers
     public class SpawnManager
     {
         private int _height, _width;
-        Vector3 posToSpawn;
+        private Vector3 _posToSpawn;
         private int _iterations = 0;
 
         public SpawnManager()
@@ -31,9 +31,10 @@ namespace SnakeV.Core.Managers
 
             for(int i=0; i<tailController.tailsList.Count; i++)
             {
-                if(tailController.tailsList[i].CurrentPos.x == (int)posToSpawn.x && tailController.tailsList[i].CurrentPos.y == (int)posToSpawn.z)
+                if(tailController.tailsList[i].transform.position.x == (int)_posToSpawn.x && tailController.tailsList[i].transform.position.z == (int)_posToSpawn.z)
                 {
                     isEmpty = false;
+                    Debug.Log("Tried to spawn on: " + _posToSpawn.x + " and " + _posToSpawn.z);
                 }
             }
 
@@ -52,13 +53,13 @@ namespace SnakeV.Core.Managers
 
         private void AssignSpawnPos()
         {
-            posToSpawn = new Vector3(UnityEngine.Random.Range(0, _width), 0, UnityEngine.Random.Range(0, _height));
+            _posToSpawn = new Vector3(Random.Range(0, _width), 0, Random.Range(0, _height));
 
         }
 
         private void SpawnTail()
         {
-            PoolManager.Instance.RequestTail(posToSpawn);
+            PoolManager.Instance.RequestTail(_posToSpawn);
         }
 
 

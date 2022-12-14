@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
 using SnakeV.Utilities;
-using System;
+using DG.Tweening;
 
 namespace SnakeV.Core
 {
@@ -16,8 +16,6 @@ namespace SnakeV.Core
         public IFollower _collectedTail;
         public IControllable _iControllable;
 
-        public static Action<Tail> SnakeGrow;
-
         public TailController()
         {
             tailsList = new List<IFollower>();
@@ -26,7 +24,7 @@ namespace SnakeV.Core
         public void AddTail(IFollower tailToAdd)
         {
             tailsList.Add(tailToAdd);
-            
+            SnakeAte();
         }
 
         public void MoveSnake()
@@ -42,6 +40,14 @@ namespace SnakeV.Core
             }
         }
 
+        public void SnakeAte()
+        {
+            for (int j = 0; j < tailsList.Count; j++)
+            {
+                //TODO: ADD A DELAY - from the player controller?
+                tailsList[j].transform.DOShakeScale(0.1f, 0.2f, 1, 0, true, ShakeRandomnessMode.Harmonic);
+            }
+        }
     }
 }
 

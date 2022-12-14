@@ -14,22 +14,11 @@ namespace SnakeV.Core.Managers
             SingletonThisObj(this);
         }
 
-        private void OnEnable()
-        {
-            PlayerController.Instance.OnPlayerDeath += ReloadScene;
-        }
-
-        private void ReloadScene()
+        //use a scneemanager instead?
+        public void ReloadScene()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-
-        private void OnDisable()
-        {
-            PlayerController.Instance.OnPlayerDeath -= ReloadScene;
-        }
-
-
 
     }
 }
