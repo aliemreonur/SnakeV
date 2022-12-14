@@ -1,32 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
-using SnakeV.Utilities;
-using SnakeV.Core;
-using SnakeV.Core.Managers;
 
-public class SpawnManager : Singleton<SpawnManager>
+namespace SnakeV.Core.Managers
 {
-    private int _height, _width;
-
-    private void Awake()
+    public class SpawnManager
     {
-        SingletonThisObj(this);
-    }
+        private int _height, _width;
+        Vector3 posToSpawn;
+        private int _iterations = 0;
 
-    private void Start()
-    {
-        _height = FloorManager.Instance.Height;
-        _width = FloorManager.Instance.Width;
-        Spawn();
-    }
-
-    public void Spawn()
-    {
-        if(PlayerController.Instance.IsAlive)
+        public SpawnManager()
         {
-            Vector3 spawnPos = new Vector3(Random.Range(0, _width), 0, Random.Range(0, _height));
-            PoolManager.Instance.RequestTail(spawnPos);
+            _height = FloorManager.Instance.Height;
+            _width = FloorManager.Instance.Width;
+            AssignSpawnPos();
+            SpawnTail();
         }
+
+        public void SpawnNewFood(TailController tailController)
+        {
+            if (!PlayerController.Instance.IsAlive)
+                return;
+            CheckPossibleSpawnPos(tailController);
+        }
+
+        private void CheckPossibleSpawnPos(TailController tailController)
+        {
+            bool isEmpty = true;
+            AssignSpawnPos();
+
+            for(int i=0; i<tailController.tailsList.Count; i++)
+            {
+                if(tailController.tailsList[i].CurrentPos.x == (int)posToSpawn.x && tailController.tailsList[i].CurrentPos.y == (int)posToSpawn.z)
+                {
+                    isEmpty = false;
+                }
+            }
+
+            _iterations++;
+
+            if (!isEmpty && _iterations < 100)
+            {
+                CheckPossibleSpawnPos(tailController); //recursive method! beware!
+            }
+
+            else if (!isEmpty && _iterations > 100)
+                Debug.Log("No free point left bro ??");
+            else
+                SpawnTail();
+        }
+
+        private void AssignSpawnPos()
+        {
+            posToSpawn = new Vector3(UnityEngine.Random.Range(0, _width), 0, UnityEngine.Random.Range(0, _height));
+
+        }
+
+        private void SpawnTail()
+        {
+            PoolManager.Instance.RequestTail(posToSpawn);
+        }
+
+
     }
+
 }
+
+

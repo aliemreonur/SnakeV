@@ -12,8 +12,7 @@ namespace SnakeV.Core
         public Vector3 PreviousPos => _previousPos;
         private Vector3 _previousPos;
         public bool Collected { get; private set; }
-        public int Rank { get; set; }
-        public int rank;
+        public Vector2Int CurrentPos { get; private set; }
 
         private void Start()
         {
@@ -22,20 +21,23 @@ namespace SnakeV.Core
 
         private void OnTriggerEnter(Collider other)
         {
-            if (Collected)
-                return;
-               
-
             if(other.CompareTag("Player"))
             {
+                if (Collected)
+                    PlayerController.Instance.Death();
+
                 Collected = true;
-                transform.position = TailController.Instance.tailsList[TailController.Instance.tailsList.Count - 1].PreviousPos;
-                TailController.Instance.AddTail(this);
-                SpawnManager.Instance.Spawn();
-                rank = Rank;
+                PlayerController.Instance.Grow(this);
+                //transform.position = TailController.Instance.tailsList[TailController.Instance.tailsList.Count - 1].PreviousPos;
+                
+                //SpawnManager.Instance.Spawn();
             }
         }
 
+        public void SetCurrentPos()
+        {
+            CurrentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        }
 
         public void SetNewPos(Vector3 posToSet)
         {
@@ -46,6 +48,8 @@ namespace SnakeV.Core
         {
             _previousPos = transform.position;
         }
+
+
     }
 
 }

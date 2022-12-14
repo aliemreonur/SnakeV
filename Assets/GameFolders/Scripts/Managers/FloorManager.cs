@@ -27,7 +27,7 @@ namespace SnakeV.Core.Managers
         }
 
         void Start()
-        {
+        {        
             PlayerController.Instance.transform.position = new Vector3(_width / 2, 0.1f, _height / 2); //bad practice to reach this on this way.
            
         }

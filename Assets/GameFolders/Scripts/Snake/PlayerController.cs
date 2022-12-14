@@ -1,16 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using SnakeV.Inputs;
 using SnakeV.Utilities;
 using SnakeV.Abstracts;
+using System;
+using SnakeV.Core.Managers;
 
 namespace SnakeV.Core
 {
-    [RequireComponent(typeof(TailController))]
     public class PlayerController : Singleton<PlayerController>, IControllable, IFollower
     {
-        //public static Action OnPlayerDeath;
+        public Action OnPlayerDeath;
 
         [Range(0.1f, 0.95f)]
         [SerializeField] private float _speed;
@@ -22,9 +21,10 @@ namespace SnakeV.Core
         public Vector3 Direction => _currentDirection;
         public bool IsAlive { get; private set; }
         public Vector3 PreviousPos { get; private set; }
+        public Vector2Int CurrentPos { get; private set; }
 
         private TailController _tailController;
-
+        private SpawnManager _spawnManager;
 
         private void Awake()
         {
@@ -36,9 +36,9 @@ namespace SnakeV.Core
         {
             _vectorConverter = new VectorConverter(this);
             _movementDelayTime = new WaitForSeconds(1-_speed);
-            _tailController = GetComponent<TailController>();
-            if (_tailController == null)
-                Debug.LogError("Head could not gather the tail controller");
+            _tailController = new TailController();
+            _spawnManager = new SpawnManager();
+
             _tailController.tailsList.Add(this);
             StartCoroutine(SnakeMoveRoutine());
         }
@@ -46,7 +46,6 @@ namespace SnakeV.Core
         void Update()
         {
             _vectorConverter.NormalUpdate();
-            _currentDirection = _vectorConverter.MoveDirection; //this is buggy!
         }
 
         IEnumerator SnakeMoveRoutine()
@@ -55,12 +54,13 @@ namespace SnakeV.Core
             {
                 SetNewPos(_currentDirection);
                 _tailController.MoveSnake();
+                CurrentPos = new Vector2Int((int)transform.position.x, (int)transform.position.z);
                 yield return _movementDelayTime;
+                SetDirection();
                 SetPreviousPos();
             }
-            
-        }
 
+        }
         public void SetNewPos(Vector3 newPos)
         {
             transform.position += newPos;
@@ -69,6 +69,25 @@ namespace SnakeV.Core
         public void SetPreviousPos()
         {
             PreviousPos = transform.position;
+        }
+
+        public void Death()
+        {
+            Debug.Log("DEAD!");
+            OnPlayerDeath?.Invoke();
+        }
+
+        public void Grow(Tail tailToAdd)
+        {
+            tailToAdd.transform.position = _tailController.tailsList[_tailController.tailsList.Count - 1].PreviousPos;
+            tailToAdd.SetCurrentPos();
+            _tailController.AddTail(tailToAdd);
+            _spawnManager.SpawnNewFood(_tailController);
+        }
+
+        private void SetDirection()
+        {
+            _currentDirection = _vectorConverter.MoveDirection;
         }
     }
 

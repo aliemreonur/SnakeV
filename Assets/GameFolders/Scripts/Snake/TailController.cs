@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
 using SnakeV.Utilities;
+using System;
 
 namespace SnakeV.Core
 {
-    public class TailController : Singleton<TailController>
+    public class TailController
     {
         [SerializeField] public List<IFollower> tailsList;
 
@@ -15,22 +16,17 @@ namespace SnakeV.Core
         public IFollower _collectedTail;
         public IControllable _iControllable;
 
-        private void Awake()
-        {
-            SingletonThisObj(this);
-        }
+        public static Action<Tail> SnakeGrow;
 
-        private void Start()
+        public TailController()
         {
             tailsList = new List<IFollower>();
-            _iControllable = GetComponent<IControllable>();
-            if (_iControllable == null)
-                Debug.Log("The tail manager could not get the player controller");
         }
 
         public void AddTail(IFollower tailToAdd)
         {
             tailsList.Add(tailToAdd);
+            
         }
 
         public void MoveSnake()
