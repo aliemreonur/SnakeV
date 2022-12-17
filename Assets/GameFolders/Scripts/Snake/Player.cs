@@ -1,4 +1,6 @@
 using UnityEngine;
+using SnakeV.Abstracts;
+using SnakeV.Core.Managers;
 
 namespace SnakeV.Core
 {
@@ -6,6 +8,7 @@ namespace SnakeV.Core
     {
         ICollectable _icollectable;
         PlayerController _playerController;
+        private uint _score;
 
         private void Start()
         {
@@ -25,7 +28,14 @@ namespace SnakeV.Core
                 //MEH ?!?
                 _icollectable.MoveToNewPos(_playerController.foodSpawner.CheckPossibleSpawnPos(_playerController.tailController));
                 _playerController.Grow();
+                UpdateScore();
             }
+        }
+
+        private void UpdateScore()
+        {
+            _score++;
+            UIManager.Instance.UpdateScore(_score);
         }
     }
 

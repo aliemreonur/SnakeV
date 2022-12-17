@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using SnakeV.Abstracts;
 
 namespace SnakeV.Inputs
 {
-    public class InputGatherer
+    public class InputGatherer:IMovable
     {
         public float Horizontal => _horizontal;
         public float Vertical => _vertical;

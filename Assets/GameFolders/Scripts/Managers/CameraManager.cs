@@ -31,8 +31,8 @@ namespace SnakeV.Utilities
             //TODO: this will be set to public for adjusting the camera on level changes 
             //TODO: OR ON change of screen orientation
             SetOrthographicSize();
-            xPos = Mathf.CeilToInt(_width / 2);
-            zPos = Mathf.CeilToInt(_height / 2);
+            xPos = (_width / 2) - 0.5f;
+            zPos = (_height / 2);
             _camera.transform.position = new Vector3(xPos, _camera.transform.position.y, zPos);
         }
 
@@ -40,12 +40,12 @@ namespace SnakeV.Utilities
         {
             if (_aspectRatio >= _targetRatio)
             {
-                _camera.orthographicSize = _height / 2;
+                _camera.orthographicSize = (_height / 2) + 2;
             }
             else
             {
                 float sizeDifference = _targetRatio / _aspectRatio;
-                _camera.orthographicSize = _height / 2 * sizeDifference;
+                _camera.orthographicSize = _height / 2 * sizeDifference + 2;
             }
         }
     }

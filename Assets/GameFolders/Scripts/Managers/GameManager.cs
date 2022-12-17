@@ -6,6 +6,8 @@ namespace SnakeV.Core.Managers
 {
     public class GameManager : Singleton<GameManager>
     {
+        public bool IsEdgesOn;
+
         public void GameLost()
         {
             UIManager.Instance.ActivateLostPanel();

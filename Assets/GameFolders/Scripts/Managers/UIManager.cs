@@ -5,13 +5,14 @@ using SnakeV.Utilities;
 using UnityEngine.UI;
 using SnakeV.Core;
 using System;
+using TMPro;
 
 namespace SnakeV.Core.Managers
 {
     public class UIManager : Singleton<UIManager>
     {
         [SerializeField] private GameObject _gameLostPanel;
-
+        [SerializeField] private TextMeshProUGUI _scoreText;
 
         protected override void Awake()
         {
@@ -28,7 +29,11 @@ namespace SnakeV.Core.Managers
         {
             //activate game won panel
         }
-       
+
+        public void UpdateScore(uint score)
+        {
+            _scoreText.text = score.ToString();
+        }
 
     }
 }

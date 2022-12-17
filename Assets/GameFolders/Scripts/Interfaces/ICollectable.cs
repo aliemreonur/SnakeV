@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICollectable 
+namespace SnakeV.Abstracts
 {
-    Transform transform { get; }
-    void Collected();
-    void AddToList(GameObject obj);
-    void MoveToNewPos(Vector3 pos);
-    void RandomCollectable();
+    public interface ICollectable : IEntityController
+    {
+        Transform transform { get; }
+        void Collected();
+        void AddToList(GameObject obj);
+        void MoveToNewPos(Vector3 pos);
+        void RandomCollectable();
+    }
 }
+
+
