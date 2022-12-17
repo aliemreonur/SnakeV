@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 799742963096727769}
   m_Layer: 0
   m_Name: TailUnit
-  m_TagString: Collectable
+  m_TagString: Tail
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,4 +110,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6fc126208653c48bb5658805b3caee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rank: 0

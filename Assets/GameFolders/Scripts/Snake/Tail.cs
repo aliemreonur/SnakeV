@@ -1,5 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using System;
 using SnakeV.Abstracts;
+using System.Linq;
 
 namespace SnakeV.Core
 {
@@ -7,24 +11,6 @@ namespace SnakeV.Core
     {
         public Vector3 PreviousPos => _previousPos;
         private Vector3 _previousPos;
-        public bool Collected { get; private set; }
-
-        private void Start()
-        {
-            Collected = false;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if(other.CompareTag("Player"))
-            {
-                if (Collected)
-                    PlayerController.Instance.Death();
-
-                Collected = true;
-                PlayerController.Instance.Grow(this);
-            }
-        }
 
         public void SetNewPos(Vector3 posToSet)
         {

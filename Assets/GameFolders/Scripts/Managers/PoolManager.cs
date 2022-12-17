@@ -12,11 +12,6 @@ namespace SnakeV.Core.Managers
         private List<Tail> _tailsList = new List<Tail>();
         private int _spawnAmount = 100; //will be changed later.  
 
-        private void Awake()
-        {
-            SingletonThisObj(this);
-        }
-
         private void Start()
         {
             SpawnIinitialPool(_spawnAmount);
@@ -38,7 +33,6 @@ namespace SnakeV.Core.Managers
 
             AddNewTail(position);
             return _tailsList[_tailsList.Count - 1];
-
         }
 
         private void SpawnIinitialPool(int spawnAmount)

@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
-using SnakeV.Utilities;
 using DG.Tweening;
+using SnakeV.Core.Managers;
 
 namespace SnakeV.Core
 {
@@ -12,6 +11,7 @@ namespace SnakeV.Core
         [SerializeField] public List<IFollower> tailsList;
 
         public Vector3 PreviousPos { get; private set; }
+        private Vector3 _posToSpawn;
 
         public IFollower _collectedTail;
         public IControllable _iControllable;
@@ -21,9 +21,10 @@ namespace SnakeV.Core
             tailsList = new List<IFollower>();
         }
 
-        public void AddTail(IFollower tailToAdd)
+        public void AddTail()
         {
-            tailsList.Add(tailToAdd);
+            _posToSpawn = tailsList[tailsList.Count - 1].PreviousPos;
+            tailsList.Add(PoolManager.Instance.RequestTail(_posToSpawn));
             SnakeAte();
         }
 

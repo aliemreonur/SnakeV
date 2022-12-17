@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+
 using UnityEngine.SceneManagement;
 using SnakeV.Utilities;
 
@@ -9,15 +6,31 @@ namespace SnakeV.Core.Managers
 {
     public class GameManager : Singleton<GameManager>
     {
-        private void Awake()
+        public void GameLost()
         {
-            SingletonThisObj(this);
+            UIManager.Instance.ActivateLostPanel();
+        }
+
+        public void GameWon()
+        {
+            
         }
 
         //use a scneemanager instead?
         public void ReloadScene()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        private void OnEnable()
+        {
+            PlayerController.Instance.OnPlayerDeath += GameLost;
+
+        }
+
+        private void OnDisable()
+        {
+            PlayerController.Instance.OnPlayerDeath -= GameLost;
         }
 
     }

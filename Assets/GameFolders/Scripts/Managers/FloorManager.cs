@@ -21,7 +21,7 @@ namespace SnakeV.Core.Managers
 
         private void Awake()
         {
-            SingletonThisObj(this);
+            base.Awake();
             _allTiles = new Tile[_width, _height];
             CreateFloor();
         }

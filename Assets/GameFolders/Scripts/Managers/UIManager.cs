@@ -4,33 +4,31 @@ using UnityEngine;
 using SnakeV.Utilities;
 using UnityEngine.UI;
 using SnakeV.Core;
+using System;
 
-namespace SnakeV.Managers
+namespace SnakeV.Core.Managers
 {
     public class UIManager : Singleton<UIManager>
     {
         [SerializeField] private GameObject _gameLostPanel;
 
-        private void Awake()
+
+        protected override void Awake()
         {
-            SingletonThisObj(this);
+            base.Awake();
             _gameLostPanel.SetActive(false);
         }
 
-        private void ActivateLostPanel()
+        public void ActivateLostPanel()
         {
             _gameLostPanel.SetActive(true);
         }
 
-        private void OnEnable()
+        public void ActivateWonPanel()
         {
-            PlayerController.Instance.OnPlayerDeath += ActivateLostPanel;
+            //activate game won panel
         }
-
-        private void OnDisable()
-        {
-            PlayerController.Instance.OnPlayerDeath -= ActivateLostPanel;
-        }
+       
 
     }
 }

@@ -1,15 +1,20 @@
-using System.Collections;
-using UnityEngine;
-using SnakeV.Utilities;
-using SnakeV.Abstracts;
 using System;
-using SnakeV.Core.Managers;
+using System.Collections;
+using SnakeV.Abstracts;
+using SnakeV.Utilities;
+using UnityEngine;
 
 namespace SnakeV.Core
 {
+    [RequireComponent(typeof(Player))]
     public class PlayerController : Singleton<PlayerController>, IControllable, IFollower
     {
+        /// <summary>
+        /// TODO: THIS SCRIPT SHALL ONLY INCLUDE THE CONTROLLERS
+        /// </summary>
+
         public Action OnPlayerDeath;
+        public bool IsAlive { get; private set; }
 
         [Range(0.1f, 0.95f)]
         [SerializeField] private float _speed;
@@ -19,24 +24,21 @@ namespace SnakeV.Core
         WaitForSeconds _movementDelayTime;
 
         public Vector3 Direction => _currentDirection;
-        public bool IsAlive { get; private set; }
         public Vector3 PreviousPos { get; private set; }
 
-        private TailController _tailController;
-        private SpawnManager _spawnManager;
+        public TailController tailController => _tailController;
+        public FoodSpawner foodSpawner => _foodSpawner;
 
-        private void Awake()
-        {
-            SingletonThisObj(this);
-            IsAlive = true;
-        }
+        private TailController _tailController;
+        private FoodSpawner _foodSpawner;
 
         void Start()
         {
             _vectorConverter = new VectorConverter(this);
             _movementDelayTime = new WaitForSeconds(1-_speed);
             _tailController = new TailController();
-            _spawnManager = new SpawnManager();
+            _foodSpawner = new FoodSpawner();
+            IsAlive = true;
 
             _tailController.tailsList.Add(this);
             StartCoroutine(SnakeMoveRoutine());
@@ -57,7 +59,6 @@ namespace SnakeV.Core
                 SetDirection();
                 SetPreviousPos();
             }
-
         }
         public void SetNewPos(Vector3 newPos)
         {
@@ -69,22 +70,21 @@ namespace SnakeV.Core
             PreviousPos = transform.position;
         }
 
-        public void Death()
+        public void Grow()
         {
-            IsAlive = false;
-            OnPlayerDeath?.Invoke();
-        }
-
-        public void Grow(Tail tailToAdd)
-        {
-            tailToAdd.transform.position = _tailController.tailsList[_tailController.tailsList.Count - 1].PreviousPos;
-            _tailController.AddTail(tailToAdd);
-            _spawnManager.SpawnNewFood(_tailController);
+            _tailController.AddTail();
+            _foodSpawner.SpawnNewFood(_tailController);
         }
 
         private void SetDirection()
         {
             _currentDirection = _vectorConverter.MoveDirection;
+        }
+
+        public void Death()
+        {
+            IsAlive = false;
+            OnPlayerDeath?.Invoke();
         }
 
     }
