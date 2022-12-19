@@ -6,13 +6,13 @@ using SnakeV.Abstracts;
 
 namespace SnakeV.Inputs
 {
-    public class InputGatherer:IMovable
+    public class InputGatherer:IInputReader
     {
-        public float Horizontal => _horizontal;
-        public float Vertical => _vertical;
+        public float Horizontal { get; set; }
+        public float Vertical { get; set; }
 
-        private float _horizontal;
-        private float _vertical;
+        //private float _horizontal;
+        //private float _vertical;
 
         private PlayerInput _playerInput;
 
@@ -26,12 +26,12 @@ namespace SnakeV.Inputs
 
         private void OnVerticalMovementGathered(InputAction.CallbackContext ctx)
         {
-            _vertical = ctx.ReadValue<float>();
+            Vertical = ctx.ReadValue<float>();
         }
 
         private void OnHorizontalMovementGathered(InputAction.CallbackContext ctx)
         {
-            _horizontal = ctx.ReadValue<float>();
+            Horizontal = ctx.ReadValue<float>();
         }
     }
 }

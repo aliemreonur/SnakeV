@@ -4,9 +4,14 @@ using UnityEngine;
 
 namespace SnakeV.Abstracts
 {
-    public interface IConvertable
+
+    public interface IInputConverter
     {
+        IInputReader InputReader { get; set; }
+        Vector3 MoveDirection { get; }
         void NormalUpdate();
+        void Test();
     }
 }
+
 

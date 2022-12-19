@@ -6,27 +6,27 @@ using SnakeV.Inputs;
 
 namespace SnakeV.Utilities
 {
-    public class VectorConverter : IConvertable
+    public class VectorConverter : IInputConverter
     {
         private Vector3 _moveDirection;
         private IControllable _player;
 
-        public Vector3 MoveDirection => _moveDirection;
+        public Vector3 MoveDirection { get; set; }
         private float _horizontal, _vertical;
 
-        private InputGatherer _inputGatherer;
+        public IInputReader InputReader { get; set; }
 
         public VectorConverter(IControllable controllable)
         {
-            _inputGatherer = new InputGatherer();
+            InputReader = new InputGatherer();
             _player = controllable;
             _moveDirection = Vector3.forward;
         }
 
         public void NormalUpdate()
         {
-            _horizontal = _inputGatherer.Horizontal;
-            _vertical = _inputGatherer.Vertical;
+            _horizontal = InputReader.Horizontal;
+            _vertical = InputReader.Vertical;
             SetDirection();
         }
 
@@ -47,6 +47,12 @@ namespace SnakeV.Utilities
             else if (_vertical == -1 && _player.Direction != Vector3.forward)
                 _moveDirection = Vector3.back;
             
+        }
+
+        public void Test()
+        {
+            if (_horizontal == 1)
+                MoveDirection = Vector3.right;
         }
 
     }

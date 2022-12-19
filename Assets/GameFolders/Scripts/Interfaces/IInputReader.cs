@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace SnakeV.Abstracts
 {
-    public interface IMovable
+    public interface IInputReader
     {
-        float Horizontal { get; }
-        float Vertical { get; }
+        float Horizontal { get; set; }
+        float Vertical { get; set; }
     }
 
 }

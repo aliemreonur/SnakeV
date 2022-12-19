@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace SnakeV.Abstracts
 {
-    public interface IFollower
+    public interface IFollower : IEntityController
     {
         Vector3 PreviousPos { get;}
-        Transform transform { get; }
         void SetNewPos(Vector3 posToSet);
         void SetPreviousPos();
     }

@@ -9,32 +9,29 @@ namespace SnakeV.Core
     [RequireComponent(typeof(Player))]
     public class PlayerController : Singleton<PlayerController>, IControllable, IFollower
     {
-        /// <summary>
-        /// TODO: THIS SCRIPT SHALL ONLY INCLUDE THE CONTROLLERS
-        /// </summary>
-
         public Action OnPlayerDeath;
         public bool IsAlive { get; private set; }
+
+        public Vector3 Direction => _currentDirection;
+        public Vector3 PreviousPos { get; private set; }
+        public IInputConverter InputConverter { get; set; } // => _vectorConverter;
+
+        public TailController tailController => _tailController;
+        public FoodSpawner foodSpawner => _foodSpawner;
 
         [Range(0.1f, 0.95f)]
         [SerializeField] private float _speed;
 
         private Vector3 _currentDirection;
-        VectorConverter _vectorConverter;
-        WaitForSeconds _movementDelayTime;
-
-        public Vector3 Direction => _currentDirection;
-        public Vector3 PreviousPos { get; private set; }
-
-        public TailController tailController => _tailController;
-        public FoodSpawner foodSpawner => _foodSpawner;
+        //private IInputConverter _vectorConverter;
+        private WaitForSeconds _movementDelayTime;
 
         private TailController _tailController;
         private FoodSpawner _foodSpawner;
 
         void Start()
         {
-            _vectorConverter = new VectorConverter(this);
+            InputConverter = new VectorConverter(this);
             _movementDelayTime = new WaitForSeconds(1-_speed);
             _tailController = new TailController();
             _foodSpawner = new FoodSpawner();
@@ -46,7 +43,7 @@ namespace SnakeV.Core
 
         void Update()
         {
-            _vectorConverter.NormalUpdate();
+            InputConverter.NormalUpdate();
         }
 
         IEnumerator SnakeMoveRoutine()
@@ -76,9 +73,9 @@ namespace SnakeV.Core
             _foodSpawner.SpawnNewFood(_tailController);
         }
 
-        private void SetDirection()
+        public void SetDirection()
         {
-            _currentDirection = _vectorConverter.MoveDirection;
+            _currentDirection = InputConverter.MoveDirection;
         }
 
         public void Death()
@@ -86,7 +83,6 @@ namespace SnakeV.Core
             IsAlive = false;
             OnPlayerDeath?.Invoke();
         }
-
     }
 
 }
