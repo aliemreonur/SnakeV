@@ -9,12 +9,17 @@ namespace SnakeV.Core.Managers
     public class PoolManager : Singleton<PoolManager>
     {
         [SerializeField] private Tail _tailUnit;
+        [SerializeField] private Transform _tailHolder;
         private List<Tail> _tailsList = new List<Tail>();
-        private int _spawnAmount = 100; //will be changed later.  
+        private int _spawnAmount = 100; //will be changed later.
+                                        //
+        private int _currentSpawns;
+
 
         private void Start()
         {
             SpawnIinitialPool(_spawnAmount);
+            _currentSpawns = _spawnAmount;
         }
 
         public Tail RequestTail(Vector3 position)
@@ -37,9 +42,10 @@ namespace SnakeV.Core.Managers
 
         private void SpawnIinitialPool(int spawnAmount)
         {
-            for(int i=0; i<spawnAmount; i++)
+            for(int i=1; i<=spawnAmount; i++)
             {
-                Tail _spawnedPiece = Instantiate(_tailUnit, transform.position, Quaternion.identity, transform);
+                Tail _spawnedPiece = Instantiate(_tailUnit, transform.position, Quaternion.identity, _tailHolder.transform);
+                _spawnedPiece.name = "Tail : " + i;
                 _spawnedPiece.gameObject.SetActive(false);
                 _tailsList.Add(_spawnedPiece);
             }
@@ -47,9 +53,12 @@ namespace SnakeV.Core.Managers
 
         private void AddNewTail(Vector3 spawnPos)
         {
-            Tail newTail = Instantiate(_tailUnit, transform.position, Quaternion.identity, transform);
+            _currentSpawns++;
+            Tail newTail = Instantiate(_tailUnit, transform.position, Quaternion.identity, _tailHolder.transform);
+            newTail.name = "Tail : " + _currentSpawns;
             _tailsList.Add(newTail);
             newTail.transform.position = spawnPos;
+            
         }
 
 

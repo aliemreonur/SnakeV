@@ -24,12 +24,14 @@ namespace SnakeV.Core
         public void AddTail()
         {
             _posToSpawn = tailsList[tailsList.Count - 1].PreviousPos;
-            tailsList.Add(PoolManager.Instance.RequestTail(_posToSpawn));
+            Tail tailToAdd = PoolManager.Instance.RequestTail(_posToSpawn);
+            tailsList.Add(tailToAdd);
             SnakeAte();
         }
 
         public void MoveSnake()
         {
+
             for (int i = tailsList.Count - 1; i > 0; i--)
             {
                 tailsList[i].SetPreviousPos();
@@ -38,7 +40,9 @@ namespace SnakeV.Core
             for (int i = tailsList.Count-1; i>0; i--)
             {
                 tailsList[i].SetNewPos(tailsList[i-1].PreviousPos);
+                
             }
+      
         }
 
         public void SnakeAte()

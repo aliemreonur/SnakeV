@@ -1,12 +1,14 @@
 
 using UnityEngine.SceneManagement;
 using SnakeV.Utilities;
+using UnityEngine;
 
 namespace SnakeV.Core.Managers
 {
     public class GameManager : Singleton<GameManager>
     {
         public bool IsEdgesOn;
+        public float GameSpeed { get; private set; }
 
         public void GameLost()
         {
@@ -33,6 +35,11 @@ namespace SnakeV.Core.Managers
         private void OnDisable()
         {
             PlayerController.Instance.OnPlayerDeath -= GameLost;
+        }
+
+        protected void SetGameSpeed()
+        {
+
         }
 
     }

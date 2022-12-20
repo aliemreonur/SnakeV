@@ -7,7 +7,7 @@ using SnakeV.Core;
 
 namespace SnakeV.Abstracts
 {
-    [RequireComponent(typeof(Food))]
+    [RequireComponent(typeof(Collectable))]
     public class FoodLoader : MonoBehaviour
     {
         ICollectable _iCollectable;
@@ -41,7 +41,11 @@ namespace SnakeV.Abstracts
                 //TODO: this is not really fine! -repeats on player script also!
                 _iCollectable.MoveToNewPos(PlayerController.Instance.foodSpawner.CheckPossibleSpawnPos(PlayerController.Instance.tailController));
             }
+
+            Addressables.Release(loadWithSingleKeyHandle);
         }
+
+
 
     }
 

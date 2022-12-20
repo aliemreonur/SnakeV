@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2744602771924306086}
   - component: {fileID: 2744602771924306087}
   - component: {fileID: 799742963096727769}
+  - component: {fileID: -6999193659021246900}
   m_Layer: 0
   m_Name: TailUnit
   m_TagString: Tail
@@ -108,5 +109,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b6fc126208653c48bb5658805b3caee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6999193659021246900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2744602771924306089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef413433eef884b70adab81c8c69e470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

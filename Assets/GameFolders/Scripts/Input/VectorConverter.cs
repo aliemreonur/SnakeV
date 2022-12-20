@@ -8,7 +8,7 @@ namespace SnakeV.Utilities
 {
     public class VectorConverter : IInputConverter
     {
-        private Vector3 _moveDirection;
+        //private Vector3 _moveDirection;
         private IControllable _player;
 
         public Vector3 MoveDirection { get; set; }
@@ -20,7 +20,7 @@ namespace SnakeV.Utilities
         {
             InputReader = new InputGatherer();
             _player = controllable;
-            _moveDirection = Vector3.forward;
+            MoveDirection = Vector3.forward;
         }
 
         public void NormalUpdate()
@@ -36,16 +36,16 @@ namespace SnakeV.Utilities
                 return;
 
             if (_horizontal == 1 && _player.Direction != Vector3.left)
-                _moveDirection = Vector3.right;
+                MoveDirection = Vector3.right;
 
             else if (_horizontal == -1 && _player.Direction != Vector3.right)
-                _moveDirection = Vector3.left;
+                MoveDirection = Vector3.left;
    
             else if (_vertical == 1 && _player.Direction != Vector3.back)
-                _moveDirection = Vector3.forward;
+                MoveDirection = Vector3.forward;
 
             else if (_vertical == -1 && _player.Direction != Vector3.forward)
-                _moveDirection = Vector3.back;
+                MoveDirection = Vector3.back;
             
         }
 

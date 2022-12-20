@@ -5,12 +5,10 @@ using SnakeV.Abstracts;
 
 namespace SnakeV.Core
 {
-    public class Food : MonoBehaviour, ICollectable
+    [RequireComponent(typeof(PlayerCollectableDetector))]
+    public class Collectable : MonoBehaviour, ICollectable
     {
         private List<GameObject> _allFruits = new List<GameObject>();
-        //public Transform transform { get; private set; }
-
-        public Food() { }
 
         public void Collected()
         {

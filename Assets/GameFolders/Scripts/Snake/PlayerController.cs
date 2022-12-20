@@ -3,10 +3,10 @@ using System.Collections;
 using SnakeV.Abstracts;
 using SnakeV.Utilities;
 using UnityEngine;
+using SnakeV.Core.Managers;
 
 namespace SnakeV.Core
 {
-    [RequireComponent(typeof(Player))]
     public class PlayerController : Singleton<PlayerController>, IControllable, IFollower
     {
         public Action OnPlayerDeath;
@@ -18,6 +18,8 @@ namespace SnakeV.Core
 
         public TailController tailController => _tailController;
         public FoodSpawner foodSpawner => _foodSpawner;
+
+        public uint Score { get; private set; }
 
         [Range(0.1f, 0.95f)]
         [SerializeField] private float _speed;
@@ -82,6 +84,12 @@ namespace SnakeV.Core
         {
             IsAlive = false;
             OnPlayerDeath?.Invoke();
+        }
+
+        public void UpdateScore()
+        {
+            Score++;
+            UIManager.Instance.UpdateScore(Score);
         }
     }
 
