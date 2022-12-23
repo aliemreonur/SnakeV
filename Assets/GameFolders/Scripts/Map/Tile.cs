@@ -9,12 +9,21 @@ namespace SnakeV.Core
 {
     public class Tile : MonoBehaviour
     {
+        public bool IsFilled => _isFilled;
         private int xPos, zPos;
+        private bool _isFilled;
+        private GameObject _lavaObj;
 
         public void SetTilePos(int x, int z)
         {
             xPos = x;
             zPos = z;
+        }
+
+        private void Awake()
+        {
+            _lavaObj = transform.GetChild(1).gameObject;
+            _lavaObj.SetActive(false);
         }
 
         public bool CheckSafeDistanceFromSnake(IFollower tailToCheck)
@@ -26,15 +35,39 @@ namespace SnakeV.Core
                 return true;
         }
 
-        public void TurnLavaOn()
+        public void TileFilled()
         {
+            if (_isFilled)
+                return;
+
+            _isFilled = true;
             /// Option 1: enable the player death script and change the material of this.
             // Option 2: The lava and tile are seperate child objects. First, the tile is on, and lava will be turned on when necessary.
             // Option 3:
             //memory check on addressable loadings of differet objects. maybe better to use a single asset loader for this purpose?
 
-            gameObject.SetActive(false);
             //StartCoroutine(DisappearRoutine());
+        }
+
+        public void LavaOn()
+        {
+            TileFilled();
+            _lavaObj.SetActive(true);
+        }
+
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                Transform obj = transform.GetChild(1);
+                obj.gameObject.SetActive(true);
+            }
+        }
+
+        public void TileEmpty()
+        {
+            if(_isFilled)
+                _isFilled = false;
         }
 
         private IEnumerator DisappearRoutine()

@@ -18,37 +18,37 @@ MonoBehaviour:
   m_GUID: 9fe3afaee7f5241769e35ccb3b52c971
   m_SerializeEntries:
   - m_GUID: 461f0170c82b53340a9812199b63bbd4
-    m_Address: Foods/Banana
+    m_Address: Collectables/Banana
     m_ReadOnly: 0
     m_SerializedLabels:
     - Food
   - m_GUID: 47365cc78e5cfad41badc534e3d2b7e1
-    m_Address: Foods/Cheese
+    m_Address: Collectables/Cheese
     m_ReadOnly: 0
     m_SerializedLabels:
     - Food
   - m_GUID: da4eeef492c0d1842963d6576330682d
-    m_Address: Foods/Cherry
+    m_Address: Collectables/Cherry
     m_ReadOnly: 0
     m_SerializedLabels:
     - Food
   - m_GUID: 54b107e50acd7e24b96d7de887c68833
-    m_Address: Foods/Hamburger
+    m_Address: Collectables/Hamburger
     m_ReadOnly: 0
     m_SerializedLabels:
     - Food
   - m_GUID: fdc7d8dffa381b54cb7740b8761d54c0
-    m_Address: Foods/HotDog
+    m_Address: Collectables/HotDog
     m_ReadOnly: 0
     m_SerializedLabels:
     - Food
   - m_GUID: bd232805ec57aa245a81c2df3f69f66a
-    m_Address: Foods/Olive
+    m_Address: Collectables/Olive
     m_ReadOnly: 0
     m_SerializedLabels:
     - Food
   - m_GUID: 7977e423937da9b48aac1866c67bb5be
-    m_Address: Foods/Melon
+    m_Address: Collectables/Melon
     m_ReadOnly: 0
     m_SerializedLabels:
     - Food

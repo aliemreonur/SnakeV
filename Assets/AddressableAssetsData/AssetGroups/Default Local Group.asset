@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: Materials/Lava
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 658b910e2f42948f89b2e19f1a9eb5c6
+    m_Address: Collectables/Bomb
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 657abcd12092c445095d163ace2499c3, type: 2}
   m_SchemaSet:

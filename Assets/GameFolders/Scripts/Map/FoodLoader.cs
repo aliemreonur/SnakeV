@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using SnakeV.Core;
+using SnakeV.Utilities;
+using SnakeV.Core.Managers;
 
 namespace SnakeV.Abstracts
 {
@@ -39,7 +41,7 @@ namespace SnakeV.Abstracts
                 _iCollectable.RandomCollectable();
 
                 //TODO: this is not really fine! -repeats on player script also!
-                _iCollectable.MoveToNewPos(PlayerController.Instance.foodSpawner.CheckPossibleSpawnPos(PlayerController.Instance.tailController));
+                _iCollectable.MoveToNewPos(DetermineSpawnPos.GetEmptySpawnPos(PlayerController.Instance.tailController, FloorManager.Instance));
             }
 
             Addressables.Release(loadWithSingleKeyHandle);

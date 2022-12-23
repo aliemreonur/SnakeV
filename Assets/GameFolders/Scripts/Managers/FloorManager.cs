@@ -15,8 +15,9 @@ namespace SnakeV.Core.Managers
         [SerializeField] private Tile _tilePrefab; //change its type to tile rather than game object
         [SerializeField] private GameObject _edgePrefab;
         [SerializeField] private Transform _tilesAndEdges;
+        [SerializeField] private Material _tileMaterial;
 
-        public Tile[,] _allTiles;
+        public Tile[,] allTiles;
         private TailController _tailController; //better to make this singleton??
 
         public int Height => _height;
@@ -27,7 +28,7 @@ namespace SnakeV.Core.Managers
         protected override void Awake()
         {
             base.Awake();
-            _allTiles = new Tile[_width, _height];
+            allTiles = new Tile[_width, _height];
         }
 
         void Start()
@@ -44,9 +45,10 @@ namespace SnakeV.Core.Managers
             {
                 for(int x=0; x<_width; x++)
                 {
-                    Vector3 posToSpawn = new Vector3(x, 0, y);
+                    Vector3 posToSpawn = new Vector3(x, 0.55f, y);
                     Tile spawnedTile = Instantiate(_tilePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
-                    _allTiles[x, y] = spawnedTile;
+                    
+                    allTiles[x, y] = spawnedTile;
                     spawnedTile.SetTilePos(x, y);
 
                     if (!GameManager.Instance.IsEdgesOn)
@@ -56,24 +58,24 @@ namespace SnakeV.Core.Managers
                     //spawn edges
                     if(x==0)
                     {
-                        posToSpawn = new Vector3(-1, 0, y);
+                        posToSpawn = new Vector3(-1, 0.55f, y);
                         Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
                     }
                     else if(x==_width-1)
                     {
-                        posToSpawn = new Vector3(_width, 0, y);
+                        posToSpawn = new Vector3(_width, 0.55f, y);
                         Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
                     }
 
                     if(y==0)
                     {
-                        posToSpawn = new Vector3(x, 0, -1);
+                        posToSpawn = new Vector3(x, 0.55f, -1);
                         Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
                     }
 
                     else if(y==_height-1)
                     {
-                        posToSpawn = new Vector3(x, 0, _height);
+                        posToSpawn = new Vector3(x, 0.55f, _height);
                         Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
                     }
                 }
@@ -81,20 +83,22 @@ namespace SnakeV.Core.Managers
 
             if(GameManager.Instance.IsEdgesOn)
                 SpawnCornerEdges();
+
+            StaticBatchingUtility.Combine(_tilesAndEdges.gameObject);
         }
 
         private void SpawnCornerEdges()
         {
-            Vector3 posToSpawn = new Vector3(-1, 0, -1);
+            Vector3 posToSpawn = new Vector3(-1, 0.55f, -1);
             Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
 
-            posToSpawn = new Vector3(-1, 0, _height);
+            posToSpawn = new Vector3(-1, 0.55f, _height);
             Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
 
-            posToSpawn = new Vector3(_width , 0, -1);
+            posToSpawn = new Vector3(_width , 0.55f, -1);
             Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
 
-            posToSpawn = new Vector3(_width, 0, _height);
+            posToSpawn = new Vector3(_width, 0.55f, _height);
             Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
         }
 
@@ -109,17 +113,19 @@ namespace SnakeV.Core.Managers
                 isEmptySpace = selectedTile.CheckSafeDistanceFromSnake(_tailController.tailsList[i]);
             }
 
-            if (isEmptySpace)
-                selectedTile.TurnLavaOn();
+            if (isEmptySpace && !selectedTile.IsFilled)
+                selectedTile.LavaOn();
             else if (_lavaIterations < 1000)
                 LavaTime();
+
+            StaticBatchingUtility.Combine(_tilesAndEdges.gameObject); //TODO: check performance for calling this frequently.
         }
 
         private Tile RandomizeTile()
         {
             int randX = Random.Range(0, _width);
             int randZ = Random.Range(0, _height);
-            return _allTiles[randX, randZ];
+            return allTiles[randX, randZ];
         }
 
         private IEnumerator LavaRoutine()

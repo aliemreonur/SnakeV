@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SnakeV.Utilities;
+using SnakeV.Core.Managers;
 
 namespace SnakeV.Core
 {
@@ -18,7 +20,7 @@ namespace SnakeV.Core
             if(other.CompareTag("Player"))
             {
                 PlayerController _playerContoller = PlayerController.Instance;
-                _collectable.MoveToNewPos(_playerContoller.foodSpawner.CheckPossibleSpawnPos(_playerContoller.tailController));
+                _collectable.MoveToNewPos(DetermineSpawnPos.GetEmptySpawnPos(_playerContoller.tailController, FloorManager.Instance));
                 _playerContoller.Grow();
                 _playerContoller.UpdateScore();
             }

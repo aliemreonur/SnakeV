@@ -17,7 +17,6 @@ namespace SnakeV.Core
         public IInputConverter InputConverter { get; set; } // => _vectorConverter;
 
         public TailController tailController => _tailController;
-        public FoodSpawner foodSpawner => _foodSpawner;
 
         public uint Score { get; private set; }
 
@@ -29,14 +28,12 @@ namespace SnakeV.Core
         private WaitForSeconds _movementDelayTime;
 
         private TailController _tailController;
-        private FoodSpawner _foodSpawner;
 
         void Start()
         {
             InputConverter = new VectorConverter(this);
             _movementDelayTime = new WaitForSeconds(1-_speed);
             _tailController = new TailController();
-            _foodSpawner = new FoodSpawner();
             IsAlive = true;
 
             _tailController.tailsList.Add(this);
@@ -72,7 +69,6 @@ namespace SnakeV.Core
         public void Grow()
         {
             _tailController.AddTail();
-            _foodSpawner.SpawnNewFood(_tailController);
         }
 
         public void SetDirection()
