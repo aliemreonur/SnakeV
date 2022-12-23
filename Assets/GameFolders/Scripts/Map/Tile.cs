@@ -41,12 +41,6 @@ namespace SnakeV.Core
                 return;
 
             _isFilled = true;
-            /// Option 1: enable the player death script and change the material of this.
-            // Option 2: The lava and tile are seperate child objects. First, the tile is on, and lava will be turned on when necessary.
-            // Option 3:
-            //memory check on addressable loadings of differet objects. maybe better to use a single asset loader for this purpose?
-
-            //StartCoroutine(DisappearRoutine());
         }
 
         public void LavaOn()
@@ -55,24 +49,10 @@ namespace SnakeV.Core
             _lavaObj.SetActive(true);
         }
 
-        private void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                Transform obj = transform.GetChild(1);
-                obj.gameObject.SetActive(true);
-            }
-        }
-
         public void TileEmpty()
         {
             if(_isFilled)
                 _isFilled = false;
-        }
-
-        private IEnumerator DisappearRoutine()
-        {
-            yield return null;
         }
     }
 }

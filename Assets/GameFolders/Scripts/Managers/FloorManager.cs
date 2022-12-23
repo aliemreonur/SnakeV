@@ -8,100 +8,75 @@ namespace SnakeV.Core.Managers
 {
     public class FloorManager : Singleton<FloorManager>
     {
-        [Range(10,50)]
-        [SerializeField] private int _height;
-        [Range(10, 50)]
-        [SerializeField] private int _width;
-        [SerializeField] private Tile _tilePrefab; //change its type to tile rather than game object
-        [SerializeField] private GameObject _edgePrefab;
+        private int _height;
+        private int _width;
         [SerializeField] private Transform _tilesAndEdges;
-        [SerializeField] private Material _tileMaterial;
 
         public Tile[,] allTiles;
         private TailController _tailController; //better to make this singleton??
+        private TileLoader _tileLoader;
 
         public int Height => _height;
         public int Width => _width;
-
         private int _lavaIterations = 0;
 
         protected override void Awake()
         {
             base.Awake();
+            _tileLoader = new TileLoader(this);
+            _width = _height = PlayerPrefs.GetInt("MapSize");
             allTiles = new Tile[_width, _height];
         }
 
         void Start()
         {
-            CreateFloor();
             PlayerController.Instance.transform.position = new Vector3(_width / 2, 0.6f, _height / 2); //bad practice to reach this on this way.
             _tailController = PlayerController.Instance.tailController;
             StartCoroutine(LavaRoutine());
         }
 
-        private void CreateFloor()
+        public void CreateFloor(Tile tile)
         {
             for(int y=0; y<_height; y++)
             {
                 for(int x=0; x<_width; x++)
                 {
                     Vector3 posToSpawn = new Vector3(x, 0.55f, y);
-                    Tile spawnedTile = Instantiate(_tilePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+                    Tile spawnedTile = Instantiate(tile, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
                     
                     allTiles[x, y] = spawnedTile;
                     spawnedTile.SetTilePos(x, y);
 
                     if (!GameManager.Instance.IsEdgesOn)
                         continue;
-
-                    //TODO: DONT LIKE THIS CODE!
-                    //spawn edges
-                    if(x==0)
-                    {
-                        posToSpawn = new Vector3(-1, 0.55f, y);
-                        Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
-                    }
-                    else if(x==_width-1)
-                    {
-                        posToSpawn = new Vector3(_width, 0.55f, y);
-                        Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
-                    }
-
-                    if(y==0)
-                    {
-                        posToSpawn = new Vector3(x, 0.55f, -1);
-                        Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
-                    }
-
-                    else if(y==_height-1)
-                    {
-                        posToSpawn = new Vector3(x, 0.55f, _height);
-                        Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
-                    }
                 }
             }
-
-            if(GameManager.Instance.IsEdgesOn)
-                SpawnCornerEdges();
 
             StaticBatchingUtility.Combine(_tilesAndEdges.gameObject);
         }
 
-        private void SpawnCornerEdges()
+        public void SpawnEdges(GameObject edge)
         {
-            Vector3 posToSpawn = new Vector3(-1, 0.55f, -1);
-            Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+            Vector3 posToSpawn = Vector3.zero;
 
-            posToSpawn = new Vector3(-1, 0.55f, _height);
-            Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+            for(int i=-1; i<=_width; i++)
+            {
+                posToSpawn = new Vector3(i, 0.55f, -1);
+                Instantiate(edge, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+                posToSpawn = new Vector3(i, 0.55f, _height);
+                Instantiate(edge, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+            }
 
-            posToSpawn = new Vector3(_width , 0.55f, -1);
-            Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+            for(int j=0; j<_height;j++)
+            {
+                posToSpawn = new Vector3(-1, 0.55f, j);
+                Instantiate(edge, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+                posToSpawn = new Vector3(_width, 0.55f, j);
+                Instantiate(edge, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
+            }
+            StaticBatchingUtility.Combine(_tilesAndEdges.gameObject);
 
-            posToSpawn = new Vector3(_width, 0.55f, _height);
-            Instantiate(_edgePrefab, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
         }
-
         public void LavaTime()
         {
             _lavaIterations++;
@@ -136,6 +111,16 @@ namespace SnakeV.Core.Managers
                 LavaTime();
                 yield return new WaitForSeconds(10f);
             }
+        }
+
+        private void Update()
+        {
+            _tileLoader.NormalUpdate();
+        }
+
+        private void OnDisable()
+        {
+            _tileLoader.ReleaseMemory();
         }
     }
 }

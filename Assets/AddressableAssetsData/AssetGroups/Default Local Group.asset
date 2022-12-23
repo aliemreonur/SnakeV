@@ -25,6 +25,14 @@ MonoBehaviour:
     m_Address: Collectables/Bomb
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: b421b371a1fa46443aecf8d569760f35
+    m_Address: Prefabs/Tile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5200acda4384a4f6a9a5d31e87fab5ec
+    m_Address: Prefabs/Edge
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 657abcd12092c445095d163ace2499c3, type: 2}
   m_SchemaSet:
