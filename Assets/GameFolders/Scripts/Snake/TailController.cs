@@ -41,8 +41,7 @@ namespace SnakeV.Core
             {
                 tailsList[i].SetNewPos(tailsList[i-1].PreviousPos);
                 
-            }
-      
+            }       
         }
 
         public void SnakeAte()
@@ -52,6 +51,21 @@ namespace SnakeV.Core
                 //TODO: ADD A DELAY - from the player controller?
                 tailsList[j].transform.DOShakeScale(0.1f, 0.2f, 1, 0, true, ShakeRandomnessMode.Harmonic);
             }
+        }
+
+        public bool CheckEmptySpaceForTails(Vector3 posToCheck)
+        {
+            bool isEmpty = true;
+            foreach(IFollower follower in tailsList)
+            {
+                if(posToCheck.x == follower.XPos || posToCheck.z == follower.ZPos)
+                {
+                    isEmpty = false;
+                    break;
+                }
+
+            }
+            return isEmpty;
         }
     }
 }

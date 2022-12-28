@@ -10,7 +10,7 @@ namespace SnakeV.Abstracts
         void Collected();
         void AddToList(GameObject obj);
         void MoveToNewPos(Vector3 pos);
-        void RandomCollectable();
+        void RandomizeCollectable();
     }
 }
 

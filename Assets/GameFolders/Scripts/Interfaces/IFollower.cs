@@ -9,6 +9,8 @@ namespace SnakeV.Abstracts
         Vector3 PreviousPos { get;}
         void SetNewPos(Vector3 posToSet);
         void SetPreviousPos();
+        public int XPos { get; }
+        public int ZPos { get; }
     }
 }
 

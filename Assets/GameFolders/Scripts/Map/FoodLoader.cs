@@ -38,7 +38,7 @@ namespace SnakeV.Abstracts
                     _iCollectable.AddToList(instantiatedObj);
                 }
 
-                _iCollectable.RandomCollectable();
+                _iCollectable.RandomizeCollectable();
 
                 //TODO: this is not really fine! -repeats on player script also!
                 _iCollectable.MoveToNewPos(DetermineSpawnPos.GetEmptySpawnPos(PlayerController.Instance.tailController, FloorManager.Instance));

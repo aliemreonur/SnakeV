@@ -11,6 +11,8 @@ namespace SnakeV.Core
     {
         public Action OnPlayerDeath;
         public bool IsAlive { get; private set; }
+        public int XPos { get; private set; }
+        public int ZPos { get; private set; }
 
         public Vector3 Direction => _currentDirection;
         public Vector3 PreviousPos { get; private set; }
@@ -64,6 +66,8 @@ namespace SnakeV.Core
         public void SetPreviousPos()
         {
             PreviousPos = transform.position;
+            XPos = (int)transform.position.x;
+            ZPos = (int) transform.position.z;
         }
 
         public void Grow()

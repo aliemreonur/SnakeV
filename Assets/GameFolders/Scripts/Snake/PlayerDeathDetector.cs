@@ -1,16 +1,19 @@
 using UnityEngine;
+using SnakeV.Abstracts;
 
 namespace SnakeV.Core
 {
     public class PlayerDeathDetector : MonoBehaviour
     {
+        
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if(other.TryGetComponent<IControllable>(out IControllable controllable))
             {
-                PlayerController.Instance.Death();
+                controllable.Death();
             }
         }
+        
     }
 }
 

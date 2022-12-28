@@ -15,7 +15,7 @@ namespace SnakeV.Utilities
             while(!isEmpty && iterations <500)
             {
                 isEmpty = true;
-                posToSpawn = new Vector3(Random.Range(0, floorManager.Width), 0.55f, Random.Range(0, floorManager.Height));
+                posToSpawn = floorManager.SetRandomPosInMap();
 
                 for (int i = 0; i < tailController.tailsList.Count; i++)
                 {
@@ -26,7 +26,7 @@ namespace SnakeV.Utilities
 
                     if (isEmpty) 
                     {
-                        isEmpty = CheckFloorTiles(posToSpawn, isEmpty);
+                        isEmpty = CheckFloorTiles(posToSpawn);
                     }
                 }
 
@@ -38,16 +38,30 @@ namespace SnakeV.Utilities
                 posToSpawn = Vector3.zero;
                 GameManager.Instance.GameWon();
             }
-                
-
             return posToSpawn;
         }
 
-        private static bool CheckFloorTiles(Vector3 posToSpawn, bool isEmpty)
+        public static bool CheckFloorTiles(Vector3 posToSpawn)
         {
+            bool posEmpty = true;
             if (FloorManager.Instance.allTiles[(int)posToSpawn.x, (int)posToSpawn.z].IsFilled)
-                isEmpty = false;
-            return isEmpty;
+                posEmpty = false;
+            return posEmpty;
+        }
+
+        public static bool CheckTails(TailController tailController, Vector3 posToCheck)
+        {
+            bool posEmpty = tailController.CheckEmptySpaceForTails(posToCheck);
+            return posEmpty;
+        }
+
+        public static bool IsPosValid(TailController tailController, Vector3 posToCheck)
+        {
+            if (posToCheck.x >= FloorManager.Instance.Width || posToCheck.z >= FloorManager.Instance.Height || posToCheck.x < 0 || posToCheck.z < 0)
+                return false;
+
+            return (CheckTails(tailController, posToCheck) && CheckFloorTiles(posToCheck));
+
         }
     }
     

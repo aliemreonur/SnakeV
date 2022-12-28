@@ -12,7 +12,7 @@ namespace SnakeV.Core
 
         public void Collected()
         {
-            RandomCollectable();
+            RandomizeCollectable();
         }
 
         public void AddToList(GameObject objToAdd)
@@ -20,7 +20,7 @@ namespace SnakeV.Core
             _allFruits.Add(objToAdd);
         }
 
-        public void RandomCollectable()
+        public void RandomizeCollectable()
         {
             int randomSelector = Random.Range(0, _allFruits.Count);
 
@@ -35,7 +35,7 @@ namespace SnakeV.Core
         public void MoveToNewPos(Vector3 newPos)
         {
             transform.position = newPos;
-            RandomCollectable();
+            RandomizeCollectable();
         }
 
     }

@@ -77,6 +77,7 @@ namespace SnakeV.Core.Managers
             StaticBatchingUtility.Combine(_tilesAndEdges.gameObject);
 
         }
+
         public void LavaTime()
         {
             _lavaIterations++;
@@ -94,6 +95,21 @@ namespace SnakeV.Core.Managers
                 LavaTime();
 
             StaticBatchingUtility.Combine(_tilesAndEdges.gameObject); //TODO: check performance for calling this frequently.
+        }
+
+        public Vector3 SetRandomPosInMap()
+        {
+            int xPos = Random.Range(0, Width);
+            int zPos = Random.Range(0, Height);
+            return new Vector3(xPos, 0.55f, zPos);
+        }
+
+        public bool IsAwayFromBounds(Vector3 posToCheck)
+        {
+            if (posToCheck.x + 2 >= _width || posToCheck.x - 2 < 0 || posToCheck.z + 2 >= _height || posToCheck.z - 2 < 0)
+                return false;
+            else
+                return true;
         }
 
         private Tile RandomizeTile()

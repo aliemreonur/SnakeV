@@ -10,6 +10,7 @@ namespace SnakeV.Abstracts
         Transform transform { get; }
         Vector3 Direction { get;}
         void SetDirection();
+        void Death();
     }
 }
 
