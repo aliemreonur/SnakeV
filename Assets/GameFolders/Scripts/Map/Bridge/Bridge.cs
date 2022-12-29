@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
 using System;
+using System.Collections;
+using SnakeV.Core.Managers;
 
-namespace SnakeV.Core.Bridge
+namespace SnakeV.Core.Bridges
 {
     public class Bridge : MonoBehaviour
     {
@@ -13,19 +13,22 @@ namespace SnakeV.Core.Bridge
         public Action OnDirectionSet;
         public BridgeDirection BridgeDirection => _bridgeDirection;
 
+        private PlayerController _playerController;
         private BridgeDirection _bridgeDirection;
         private Vector2Int _exitPoint;
         private Vector2Int _enterPoint;
+
+        private void Awake()
+        {
+            _playerController = PlayerController.Instance;
+        }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
-                //too many reaches to instance!!
-                if ((PlayerController.Instance.XPos != _enterPoint.x) || (PlayerController.Instance.ZPos != _enterPoint.y))
-                {
-                    PlayerController.Instance.Death();
-                }
+                if ((_playerController.XPos != _enterPoint.x) || (_playerController.ZPos != _enterPoint.y))
+                    _playerController.Death();
             }
         }
 
@@ -33,8 +36,8 @@ namespace SnakeV.Core.Bridge
         {
             if(other.CompareTag("Player"))
             {
-                if ((PlayerController.Instance.transform.position.x != _exitPoint.x) || (PlayerController.Instance.transform.position.z != _exitPoint.y))
-                    PlayerController.Instance.Death();
+                if ((_playerController.transform.position.x != _exitPoint.x) || (_playerController.transform.position.z != _exitPoint.y))
+                    _playerController.Death();
             }
         }
 
@@ -43,6 +46,7 @@ namespace SnakeV.Core.Bridge
             _bridgeDirection = direction;
             SetGateEnterAndExits(direction);
             OnDirectionSet?.Invoke();
+            StartCoroutine(DisableBridgeRoutine());
         }
 
         private void SetGateEnterAndExits(BridgeDirection direction)
@@ -68,23 +72,18 @@ namespace SnakeV.Core.Bridge
             }
         }
 
-        private void OnEnable()
-        {
-            Destroy(this.gameObject, 30f);
-        }
-
-        private bool CheckEnterOrExitPoint(Vector2Int pointToCheck)
-        {
-            //better to reach out to this via interface
-            PlayerController playerController = PlayerController.Instance;
-
-            return (playerController.XPos == pointToCheck.x && playerController.ZPos == pointToCheck.y);
-        }
-
         public void SetXandZPos(Vector3 pos)
         {
             XPos = (int)pos.x;
             ZPos = (int)pos.z;
+            FloorManager.Instance.allTiles[XPos, ZPos].TileFull();
+        }
+
+        private IEnumerator DisableBridgeRoutine()
+        {
+            yield return new WaitForSeconds(20f);
+            FloorManager.Instance.allTiles[XPos, ZPos].TileEmpty();
+            gameObject.SetActive(false);
         }
     }
 

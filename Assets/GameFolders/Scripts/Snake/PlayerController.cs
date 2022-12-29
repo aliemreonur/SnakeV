@@ -26,7 +26,6 @@ namespace SnakeV.Core
         [SerializeField] private float _speed;
 
         private Vector3 _currentDirection;
-        //private IInputConverter _vectorConverter;
         private WaitForSeconds _movementDelayTime;
 
         private TailController _tailController;
@@ -70,7 +69,13 @@ namespace SnakeV.Core
             ZPos = (int) transform.position.z;
         }
 
-        public void Grow()
+        public void Ate()
+        {
+            Grow();
+            UpdateScore();
+        }
+
+        private void Grow()
         {
             _tailController.AddTail();
         }
@@ -86,7 +91,7 @@ namespace SnakeV.Core
             OnPlayerDeath?.Invoke();
         }
 
-        public void UpdateScore()
+        private void UpdateScore()
         {
             Score++;
             UIManager.Instance.UpdateScore(Score);

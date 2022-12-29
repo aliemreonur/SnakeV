@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
+using SnakeV.Core.Managers;
 
-namespace SnakeV.Core
+namespace SnakeV.Core.Collectables
 {
-    [RequireComponent(typeof(PlayerCollectableDetector))]
-    public class Collectable : MonoBehaviour, ICollectable
+    public class Collectable : ICollectable
     {
         private List<GameObject> _allFruits = new List<GameObject>();
+        public Transform transform { get; private set; }
+        private FloorManager _floorManager;
+        MonoBehaviour _monoBehaviourObj;
+
+        public Collectable(FloorManager floorManager, MonoBehaviour monoBehaviour)
+        {
+            _floorManager = floorManager;
+            _monoBehaviourObj = monoBehaviour;
+        }
 
         public void Collected()
         {
@@ -34,7 +43,9 @@ namespace SnakeV.Core
 
         public void MoveToNewPos(Vector3 newPos)
         {
-            transform.position = newPos;
+            _floorManager.allTiles[(int)_monoBehaviourObj.transform.position.x, (int)_monoBehaviourObj.transform.position.z].TileEmpty();
+            _monoBehaviourObj.transform.position = newPos;
+            _floorManager.allTiles[(int)newPos.x, (int)newPos.z].TileFull(); 
             RandomizeCollectable();
         }
 

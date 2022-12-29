@@ -200,52 +200,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 46016693}
   m_CullTransparentMesh: 1
---- !u!1 &83800599
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 83800601}
-  - component: {fileID: 83800600}
-  m_Layer: 0
-  m_Name: BridgeManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &83800600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 83800599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87b58bcba58254644bbf4e8b0b0b513a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bridgePrefab: {fileID: -9218883835779728121, guid: 849b7eb46624848059c46da7f1b3e0fc, type: 3}
-  bridgeAmount: 0
---- !u!4 &83800601
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 83800599}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2142367223}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &134951827
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,6 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsEdgesOn: 1
+  _bridgeSpawnTime: 20
 --- !u!1 &492158334
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +529,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2142367223}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &537659677
 GameObject:
@@ -2231,6 +2186,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2142367223}
   - component: {fileID: 2142367224}
+  - component: {fileID: 2142367225}
+  - component: {fileID: 2142367226}
   m_Layer: 0
   m_Name: FloorManager
   m_TagString: Untagged
@@ -2250,7 +2207,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 83800601}
   - {fileID: 492158335}
   m_Father: {fileID: 477517531}
   m_RootOrder: 0
@@ -2268,6 +2224,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tilesAndEdges: {fileID: 492158335}
+--- !u!114 &2142367225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142367222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b58bcba58254644bbf4e8b0b0b513a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2142367226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142367222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504f3dfbdf6ad4627aee71e2098bd628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3822272085191159691
 PrefabInstance:
   m_ObjectHideFlags: 0

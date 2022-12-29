@@ -2,14 +2,13 @@ using UnityEngine;
 using SnakeV.Abstracts;
 using SnakeV.Utilities;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace SnakeV.Core.Managers
 {
     public class FloorManager : Singleton<FloorManager>
     {
-        private int _height;
-        private int _width;
+        private int _height = 10;
+        private int _width = 10;
         [SerializeField] private Transform _tilesAndEdges;
 
         public Tile[,] allTiles;
@@ -94,7 +93,7 @@ namespace SnakeV.Core.Managers
             else if (_lavaIterations < 1000)
                 LavaTime();
 
-            StaticBatchingUtility.Combine(_tilesAndEdges.gameObject); //TODO: check performance for calling this frequently.
+            //StaticBatchingUtility.Combine(_tilesAndEdges.gameObject); //TODO: check performance for calling this frequently.
         }
 
         public Vector3 SetRandomPosInMap()

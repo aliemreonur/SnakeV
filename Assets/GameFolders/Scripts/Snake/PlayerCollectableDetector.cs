@@ -3,27 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Utilities;
 using SnakeV.Core.Managers;
+using SnakeV.Abstracts;
 
-namespace SnakeV.Core
+namespace SnakeV.Core.Collectables
 {
-
-    [RequireComponent(typeof(Collectable))]
-    public class PlayerCollectableDetector : MonoBehaviour
+    public class PlayerCollectableDetector
     {
-        Collectable _collectable;
-        private void Start()
+        private ICollectable _collectable;
+        private PlayerController _playerController;
+
+        public PlayerCollectableDetector(PlayerController playerController, ICollectable icollectable)
         {
-            _collectable = GetComponent<Collectable>();
+            _collectable = icollectable;
+            _playerController = playerController;
         }
-        private void OnTriggerEnter(Collider other)
+
+        public void OnPlayerTrigger()
         {
-            if(other.CompareTag("Player"))
-            {
-                PlayerController _playerContoller = PlayerController.Instance;
-                _collectable.MoveToNewPos(DetermineSpawnPos.GetEmptySpawnPos(_playerContoller.tailController, FloorManager.Instance));
-                _playerContoller.Grow();
-                _playerContoller.UpdateScore();
-            }
+            _collectable.MoveToNewPos(DetermineSpawnPos.GetEmptySpawnPos(_playerController.tailController, FloorManager.Instance));
+            _playerController.Ate();
         }
     }
 }

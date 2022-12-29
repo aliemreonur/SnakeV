@@ -3,24 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using SnakeV.Core;
 using SnakeV.Utilities;
 using SnakeV.Core.Managers;
+using SnakeV.Abstracts;
 
-namespace SnakeV.Abstracts
+namespace SnakeV.Core.Collectables
 {
-    [RequireComponent(typeof(Collectable))]
-    public class FoodLoader : MonoBehaviour
+    public class FoodController : MonoBehaviour
     {
         ICollectable _iCollectable;
+        FloorManager _floorManager;
+        PlayerCollectableDetector _playerCollectableDetector;
+        PlayerController _playerController;
+
+        private void Awake()
+        {
+            _playerController = PlayerController.Instance;
+            _floorManager = FloorManager.Instance;
+            _iCollectable = new Collectable(_floorManager, this);
+            _playerCollectableDetector = new PlayerCollectableDetector(_playerController, _iCollectable);
+        }
 
         void Start()
         {
+
             StartCoroutine(LoadAllAssetsByKey());
-            
-            _iCollectable = GetComponent<ICollectable>();
-            if (_iCollectable == null)
-                Debug.LogError("Could not get the icollectable!");
         }
 
         IEnumerator LoadAllAssetsByKey()
@@ -39,15 +46,19 @@ namespace SnakeV.Abstracts
                 }
 
                 _iCollectable.RandomizeCollectable();
-
-                //TODO: this is not really fine! -repeats on player script also!
-                _iCollectable.MoveToNewPos(DetermineSpawnPos.GetEmptySpawnPos(PlayerController.Instance.tailController, FloorManager.Instance));
+                _iCollectable.MoveToNewPos(DetermineSpawnPos.GetEmptySpawnPos(_playerController.tailController, FloorManager.Instance));
             }
 
             Addressables.Release(loadWithSingleKeyHandle);
         }
 
-
+        private void OnTriggerEnter(Collider other)
+        {
+            if(other.CompareTag("Player"))
+            {
+                _playerCollectableDetector.OnPlayerTrigger();
+            }
+        }
 
     }
 

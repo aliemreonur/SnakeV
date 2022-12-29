@@ -5,45 +5,52 @@ using SnakeV.Utilities;
 using SnakeV.Core.Managers;
 using SnakeV.Abstracts;
 
-namespace SnakeV.Core.Bridge
+namespace SnakeV.Core.Bridges
 {
-    public class BridgeManager : MonoBehaviour
+    /// <summary>
+    /// TODO: Definitely needs some more tidying up
+    /// </summary>
+    public class BridgeManager : Singleton<BridgeManager>
     {
-        private List<Bridge> _bridgesList = new List<Bridge>();
-        [SerializeField] Bridge _bridgePrefab; //addressables and pool!
-        public int bridgeAmount;
-        BridgeDirection _bridgeEnteranceDirection;
+        private int _bridgeAmount;
+        private BridgeDirection _bridgeEnteranceDirection;
         private TailController _tailController;
+        private List<Bridge> _bridgesList = new List<Bridge>();
         private List<Vector3> bridgePosToSpawn = new List<Vector3>();
-        private Vector3 _bridgeStartPoint;
-        
+        private WaitForSeconds _bridgeSpawnTime;
 
-        private void Update()
+        private void Start()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-                ConstructBridges();
+            _bridgeSpawnTime = new WaitForSeconds(GameManager.Instance.BridgeSpawnTime);
+            AssignTailController();
+            StartCoroutine(BridgeSpawnRoutine());
         }
 
         public void ConstructBridges()
         {
-            AssignTailController();
             SetBridgeAmount();
 
             if (!CheckSuitablePosAndDirection())
                 return;
-
             SpawnBridges();
         }
 
+
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                ConstructBridges();
+            }
+        }
         private void SpawnBridges()
         {
             for (int i = 0; i < bridgePosToSpawn.Count; i++)
             {
-                Bridge instantiatedBridge = Instantiate(_bridgePrefab, bridgePosToSpawn[i], Quaternion.identity, transform);
-                _bridgesList.Add(instantiatedBridge);
-                instantiatedBridge.SetXandZPos(bridgePosToSpawn[i]);
-                instantiatedBridge.SetBridgeDirection(_bridgeEnteranceDirection);
-                //bridge setdirection
+                Bridge spawnedBridge = PoolManager.Instance.RequestBridge(bridgePosToSpawn[i]);
+                _bridgesList.Add(spawnedBridge);
+                spawnedBridge.SetXandZPos(bridgePosToSpawn[i]);
+                spawnedBridge.SetBridgeDirection(_bridgeEnteranceDirection);
             }
             _bridgesList.Clear();
         }
@@ -56,7 +63,7 @@ namespace SnakeV.Core.Bridge
 
         private void SetBridgeAmount()
         {
-            bridgeAmount = Random.Range(2, Mathf.Min(5, FloorManager.Instance.Width));
+            _bridgeAmount = Random.Range(2, Mathf.Min(5, FloorManager.Instance.Width));
         }
 
 
@@ -73,11 +80,13 @@ namespace SnakeV.Core.Bridge
             if (!FloorManager.Instance.IsAwayFromBounds(posToSpawn))
                 return false;
 
-            bridgePosToSpawn = BridgesPositions(bridgeAmount, Random.Range(0, 4), posToSpawn);
+            bridgePosToSpawn = BridgesPositions(_bridgeAmount, Random.Range(0, 4), posToSpawn);
+            if (bridgePosToSpawn.Count < 2)
+                bridgePosToSpawn.Clear();
+
             return bridgePosToSpawn.Count > 1;
         }
 
-        //TODO: THIS METHOD REPEATS ITSELF
         private List<Vector3> BridgesPositions(int totalAmount, int directionToCheck, Vector3 initialPos)
         {
             List<Vector3> pointsToCheck = new List<Vector3>();
@@ -88,48 +97,28 @@ namespace SnakeV.Core.Bridge
                     for(int i=0; i<totalAmount; i++)
                     {
                         Vector3 posToAdd = new Vector3(initialPos.x, initialPos.y, initialPos.z + i);
-                        if (DetermineSpawnPos.IsPosValid(_tailController, posToAdd))
-                            pointsToCheck.Add(posToAdd);
-                        else if(pointsToCheck.Count<2)
-                        {
-                            pointsToCheck.Clear();
-                        }
+                        CheckPointToAddToList(pointsToCheck, posToAdd);
                     }
                     break;
                 case 1: //right
                     for (int i = 0; i < totalAmount; i++)
                     {
                         Vector3 posToAdd = new Vector3(initialPos.x+i, initialPos.y, initialPos.z);
-                        if (DetermineSpawnPos.IsPosValid(_tailController, posToAdd))
-                            pointsToCheck.Add(posToAdd);
-                        else if (pointsToCheck.Count < 2)
-                        {
-                            pointsToCheck.Clear();
-                        }
+                        CheckPointToAddToList(pointsToCheck, posToAdd);
                     }
                     break;
                 case 2: //down
                     for (int i = 0; i < totalAmount; i++)
                     {
                         Vector3 posToAdd = new Vector3(initialPos.x, initialPos.y, initialPos.z-i);
-                        if (DetermineSpawnPos.IsPosValid(_tailController, posToAdd))
-                            pointsToCheck.Add(posToAdd);
-                        else if (pointsToCheck.Count < 2)
-                        {
-                            pointsToCheck.Clear();
-                        }
+                        CheckPointToAddToList(pointsToCheck, posToAdd);
                     }
                     break;
                 default: //left
                     for (int i = 0; i < totalAmount; i++)
                     {
                         Vector3 posToAdd = new Vector3(initialPos.x-i, initialPos.y, initialPos.z);
-                        if (DetermineSpawnPos.IsPosValid(_tailController, posToAdd))
-                            pointsToCheck.Add(posToAdd);
-                        else if (pointsToCheck.Count < 2)
-                        {
-                            pointsToCheck.Clear();
-                        }
+                        CheckPointToAddToList(pointsToCheck, posToAdd);
                     }
                     break; 
             }
@@ -137,7 +126,7 @@ namespace SnakeV.Core.Bridge
             if (pointsToCheck.Count == 0)
                 return pointsToCheck;
 
-            else if (pointsToCheck[pointsToCheck.Count - 1].x == 0 || pointsToCheck[pointsToCheck.Count - 1].x == FloorManager.Instance.Width - 1
+            if (pointsToCheck[pointsToCheck.Count - 1].x == 0 || pointsToCheck[pointsToCheck.Count - 1].x == FloorManager.Instance.Width - 1
                 || pointsToCheck[pointsToCheck.Count - 1].z == 0 || pointsToCheck[pointsToCheck.Count - 1].z == FloorManager.Instance.Height - 1)
                 pointsToCheck.RemoveAt(pointsToCheck.Count - 1);
 
@@ -146,6 +135,16 @@ namespace SnakeV.Core.Bridge
 
             return pointsToCheck;
 
+        }
+
+        private void CheckPointToAddToList(List<Vector3> pointsToCheck, Vector3 posToAdd)
+        {
+            if (DetermineSpawnPos.IsPosValid(_tailController, posToAdd))
+                pointsToCheck.Add(posToAdd);
+            else if (pointsToCheck.Count < 2)
+            {
+                pointsToCheck.Clear();
+            }
         }
 
         private void SetBridgeDirection(int direction)
@@ -167,7 +166,14 @@ namespace SnakeV.Core.Bridge
             }
         }
 
-       
+       private IEnumerator BridgeSpawnRoutine()
+        {
+            while(PlayerController.Instance.IsAlive)
+            {
+                yield return _bridgeSpawnTime;
+                ConstructBridges();
+            }
+        }
 
     }
 

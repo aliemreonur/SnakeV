@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 1169056240293875769}
   - component: {fileID: 1874888637406584066}
   - component: {fileID: 8364484010544236}
-  - component: {fileID: 4241486992412741883}
-  - component: {fileID: 209241467831558280}
   m_Layer: 0
   m_Name: Food
   m_TagString: Collectable
@@ -58,29 +56,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7dc1ebb943d3942bd8e0076e73b7db89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4241486992412741883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4241486992412741880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4af751f2b3ca74a1aa24ebbc66600c44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &209241467831558280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4241486992412741880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2ee5782a44b94e358525858dbc12c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

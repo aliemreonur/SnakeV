@@ -33,7 +33,7 @@ public class Bomb : MonoBehaviour
         Vector3 posToSpawn = DetermineSpawnPos.GetEmptySpawnPos(PlayerController.Instance.tailController, FloorManager.Instance);
         transform.position = posToSpawn;
         _spawnedTile = FloorManager.Instance.allTiles[(int)posToSpawn.x, (int)posToSpawn.z];
-        _spawnedTile.TileFilled();
+        _spawnedTile.TileFull();
 
         ParticleEnabled(true);
     }

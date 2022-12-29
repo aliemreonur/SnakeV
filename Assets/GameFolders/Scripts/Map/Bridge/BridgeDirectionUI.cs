@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using SnakeV.Abstracts;
 
-namespace SnakeV.Core.Bridge
+namespace SnakeV.Core.Bridges
 {
     [RequireComponent(typeof(Bridge))]
     public class BridgeDirectionUI : MonoBehaviour

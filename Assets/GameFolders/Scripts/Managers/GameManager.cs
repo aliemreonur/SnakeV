@@ -1,4 +1,3 @@
-
 using UnityEngine.SceneManagement;
 using SnakeV.Utilities;
 using UnityEngine;
@@ -9,6 +8,8 @@ namespace SnakeV.Core.Managers
     {
         public bool IsEdgesOn;
         public float GameSpeed { get; private set; }
+        public int BridgeSpawnTime => _bridgeSpawnTime;
+        [SerializeField] private int _bridgeSpawnTime = 20;
 
         public void GameLost()
         {

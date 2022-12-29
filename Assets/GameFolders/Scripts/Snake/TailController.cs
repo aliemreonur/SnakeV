@@ -49,7 +49,7 @@ namespace SnakeV.Core
             for (int j = 0; j < tailsList.Count; j++)
             {
                 //TODO: ADD A DELAY - from the player controller?
-                tailsList[j].transform.DOShakeScale(0.1f, 0.2f, 1, 0, true, ShakeRandomnessMode.Harmonic);
+                tailsList[j].transform.DOShakeScale(0.3f, 0.2f, 1, 0, true, ShakeRandomnessMode.Harmonic);
             }
         }
 

@@ -24,7 +24,7 @@ namespace SnakeV.Core
 
         private void Start()
         {
-            AssignBombAmount(3); //this will be determined according to level hardness.
+            AssignBombAmount(1); //this will be determined according to level hardness.
             _bombHandle = Addressables.LoadAssetAsync<GameObject>("Collectables/Bomb");
             _bombHandle.Completed += OnBombAssetLoaded;
             _spawnPos = new Vector3(0, -15, 0);
@@ -47,14 +47,11 @@ namespace SnakeV.Core
             }
         }
 
-
         private void AssignBombAmount(uint bombAmount)
         {
             _numberOfBombs = bombAmount; //this will be gathered regarding to hardness of the level.
         }
         
-       
-
         private void OnDisable()
         {
             Addressables.Release(_bombHandle);

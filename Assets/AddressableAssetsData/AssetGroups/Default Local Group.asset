@@ -33,6 +33,10 @@ MonoBehaviour:
     m_Address: Prefabs/Edge
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 849b7eb46624848059c46da7f1b3e0fc
+    m_Address: Prefabs/Bridge
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 657abcd12092c445095d163ace2499c3, type: 2}
   m_SchemaSet:

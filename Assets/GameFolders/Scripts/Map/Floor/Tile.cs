@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace SnakeV.Core
 {
@@ -35,7 +31,7 @@ namespace SnakeV.Core
                 return true;
         }
 
-        public void TileFilled()
+        public void TileFull()
         {
             if (_isFilled)
                 return;
@@ -45,7 +41,7 @@ namespace SnakeV.Core
 
         public void LavaOn()
         {
-            TileFilled();
+            TileFull();
             _lavaObj.SetActive(true);
         }
 
