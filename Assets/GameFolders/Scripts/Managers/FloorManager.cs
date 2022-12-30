@@ -51,7 +51,7 @@ namespace SnakeV.Core.Managers
                 }
             }
 
-            StaticBatchingUtility.Combine(_tilesAndEdges.gameObject);
+            StaticBatchingUtility.Combine(_tilesAndEdges.gameObject); //called twice
         }
 
         public void SpawnEdges(GameObject edge)

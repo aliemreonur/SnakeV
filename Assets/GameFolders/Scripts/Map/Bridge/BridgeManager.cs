@@ -18,12 +18,13 @@ namespace SnakeV.Core.Bridges
         private List<Bridge> _bridgesList = new List<Bridge>();
         private List<Vector3> bridgePosToSpawn = new List<Vector3>();
         private WaitForSeconds _bridgeSpawnTime;
+        FloorManager _floorManager;
 
         private void Start()
         {
             _bridgeSpawnTime = new WaitForSeconds(GameManager.Instance.BridgeSpawnTime);
+            _floorManager = FloorManager.Instance;
             AssignTailController();
-            StartCoroutine(BridgeSpawnRoutine());
         }
 
         public void ConstructBridges()
@@ -34,7 +35,6 @@ namespace SnakeV.Core.Bridges
                 return;
             SpawnBridges();
         }
-
 
         private void Update()
         {
@@ -63,21 +63,21 @@ namespace SnakeV.Core.Bridges
 
         private void SetBridgeAmount()
         {
-            _bridgeAmount = Random.Range(2, Mathf.Min(5, FloorManager.Instance.Width));
+            _bridgeAmount = Random.Range(2, Mathf.Min(5, _floorManager.Width));
         }
 
 
         public bool CheckSuitablePosAndDirection()
         {
             int iterations = 0;
-            Vector3 posToSpawn = DetermineSpawnPos.GetEmptySpawnPos(_tailController, FloorManager.Instance);
+            Vector3 posToSpawn = DetermineSpawnPos.GetEmptySpawnPos(_tailController, _floorManager);
             while(!FloorManager.Instance.IsAwayFromBounds(posToSpawn) && iterations<100)
             {
-                posToSpawn = DetermineSpawnPos.GetEmptySpawnPos(_tailController, FloorManager.Instance);
+                posToSpawn = DetermineSpawnPos.GetEmptySpawnPos(_tailController, _floorManager);
                 iterations++;
             }
 
-            if (!FloorManager.Instance.IsAwayFromBounds(posToSpawn))
+            if (!_floorManager.IsAwayFromBounds(posToSpawn))
                 return false;
 
             bridgePosToSpawn = BridgesPositions(_bridgeAmount, Random.Range(0, 4), posToSpawn);
@@ -126,8 +126,8 @@ namespace SnakeV.Core.Bridges
             if (pointsToCheck.Count == 0)
                 return pointsToCheck;
 
-            if (pointsToCheck[pointsToCheck.Count - 1].x == 0 || pointsToCheck[pointsToCheck.Count - 1].x == FloorManager.Instance.Width - 1
-                || pointsToCheck[pointsToCheck.Count - 1].z == 0 || pointsToCheck[pointsToCheck.Count - 1].z == FloorManager.Instance.Height - 1)
+            if (pointsToCheck[pointsToCheck.Count - 1].x == 0 || pointsToCheck[pointsToCheck.Count - 1].x == _floorManager.Width - 1
+                || pointsToCheck[pointsToCheck.Count - 1].z == 0 || pointsToCheck[pointsToCheck.Count - 1].z == _floorManager.Height - 1)
                 pointsToCheck.RemoveAt(pointsToCheck.Count - 1);
 
             if (pointsToCheck.Count > 1)
@@ -166,13 +166,28 @@ namespace SnakeV.Core.Bridges
             }
         }
 
-       private IEnumerator BridgeSpawnRoutine()
+        private void StartSpawning()
+        {
+            StartCoroutine(BridgeSpawnRoutine());
+        }
+
+        private IEnumerator BridgeSpawnRoutine()
         {
             while(PlayerController.Instance.IsAlive)
             {
                 yield return _bridgeSpawnTime;
                 ConstructBridges();
             }
+        }
+
+        private void OnEnable()
+        {
+            GameManager.Instance.OnGameStart += StartSpawning;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnGameStart -= StartSpawning;
         }
 
     }

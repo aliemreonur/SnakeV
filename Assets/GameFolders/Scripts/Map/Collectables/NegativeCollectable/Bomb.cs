@@ -20,10 +20,10 @@ public class Bomb : MonoBehaviour
             Debug.Log("Bomb could not gather the particle system");
         _inactivePos = transform.position;
         _onScreenTime = new WaitForSeconds(Random.Range(5, 15));
-        _offScreenTime = new WaitForSeconds(Random.Range(3, 10));
+        _offScreenTime = new WaitForSeconds(Random.Range(5, 15));
     }
 
-    void Start()
+    private void StartMovingInMap()
     {
         StartCoroutine(ChangePosRoutine());
     }
@@ -60,5 +60,15 @@ public class Bomb : MonoBehaviour
             MoveToInactivePoint();
             yield return _offScreenTime;
         }
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnGameStart += StartMovingInMap;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStart -= StartMovingInMap;
     }
 }

@@ -22,23 +22,17 @@ namespace SnakeV.Core
 
         public uint Score { get; private set; }
 
-        [Range(0.1f, 0.95f)]
-        [SerializeField] private float _speed;
-
         private Vector3 _currentDirection;
         private WaitForSeconds _movementDelayTime;
-
         private TailController _tailController;
 
         void Start()
         {
             InputConverter = new VectorConverter(this);
-            _movementDelayTime = new WaitForSeconds(1-_speed);
+            _movementDelayTime = new WaitForSeconds(1-GameManager.Instance.GameSpeed);
             _tailController = new TailController();
-            IsAlive = true;
-
             _tailController.tailsList.Add(this);
-            StartCoroutine(SnakeMoveRoutine());
+
         }
 
         void Update()
@@ -46,17 +40,12 @@ namespace SnakeV.Core
             InputConverter.NormalUpdate();
         }
 
-        IEnumerator SnakeMoveRoutine()
+        public void StartMoving()
         {
-            while(IsAlive)
-            {
-                SetNewPos(_currentDirection);
-                _tailController.MoveSnake();
-                yield return _movementDelayTime;
-                SetDirection();
-                SetPreviousPos();
-            }
+            IsAlive = true;
+            StartCoroutine(SnakeMoveRoutine());
         }
+
         public void SetNewPos(Vector3 newPos)
         {
             transform.position += newPos;
@@ -75,15 +64,6 @@ namespace SnakeV.Core
             UpdateScore();
         }
 
-        private void Grow()
-        {
-            _tailController.AddTail();
-        }
-
-        public void SetDirection()
-        {
-            _currentDirection = InputConverter.MoveDirection;
-        }
 
         public void Death()
         {
@@ -91,10 +71,33 @@ namespace SnakeV.Core
             OnPlayerDeath?.Invoke();
         }
 
+        public void SetDirection()
+        {
+            _currentDirection = InputConverter.MoveDirection;
+        }
+
+        private void Grow()
+        {
+            _tailController.AddTail();
+        }
+
+
         private void UpdateScore()
         {
             Score++;
             UIManager.Instance.UpdateScore(Score);
+        }
+
+        private IEnumerator SnakeMoveRoutine()
+        {
+            while (IsAlive)
+            {
+                SetNewPos(_currentDirection);
+                _tailController.MoveSnake();
+                yield return _movementDelayTime;
+                SetDirection();
+                SetPreviousPos();
+            }
         }
     }
 

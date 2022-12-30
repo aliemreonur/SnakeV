@@ -19,15 +19,7 @@ namespace SnakeV.Utilities
 
                 for (int i = 0; i < tailController.tailsList.Count; i++)
                 {
-                    if (tailController.tailsList[i].transform.position.x == (int)posToSpawn.x && tailController.tailsList[i].transform.position.z == (int)posToSpawn.z)
-                    {
-                        isEmpty = false;
-                    }
-
-                    if (isEmpty) 
-                    {
-                        isEmpty = CheckFloorTiles(posToSpawn);
-                    }
+                    isEmpty = CheckTails(tailController, posToSpawn) && CheckFloorTiles(posToSpawn);
                 }
 
                 iterations++;
