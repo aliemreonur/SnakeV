@@ -12,9 +12,9 @@ namespace SnakeV.Core.Managers
         public float GameSpeed => _gameSpeed;
         public Action<bool> OnGameWon;
         public Action OnGameStart;
-
         public int BridgeSpawnTime => _bridgeSpawnTime;
-        [SerializeField] private int _bridgeSpawnTime = 10;
+        private int _bridgeSpawnTime = 10;
+
         [Range(0.5f,0.95f)]
         [SerializeField] private float _gameSpeed = 0.8f;
 
@@ -37,7 +37,6 @@ namespace SnakeV.Core.Managers
             OnGameWon?.Invoke(true);
         }
 
-        //use a scneemanager instead?
         public void ReloadScene()
         {
             SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
@@ -55,7 +54,10 @@ namespace SnakeV.Core.Managers
 
         protected void SetGameSpeed()
         {
-
+            if (PlayerPrefs.HasKey("GameSpeed"))
+                _gameSpeed = PlayerPrefs.GetFloat("GameSpeed");
+            else
+                _gameSpeed = 0.8f;
         }
 
     }

@@ -35,7 +35,7 @@ namespace SnakeV.Abstracts
         {
             if (!_isLoaded)
                 return;
-            _lavaMaterial.mainTextureOffset += Time.deltaTime * 0.5f * Vector2.right;
+            _lavaMaterial.mainTextureOffset += Time.deltaTime * 0.2f * Vector2.right;
         }
 
         private void OnTileLoad(AsyncOperationHandle<GameObject> obj)

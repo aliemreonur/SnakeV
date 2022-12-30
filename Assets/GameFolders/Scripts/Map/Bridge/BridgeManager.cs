@@ -7,9 +7,6 @@ using SnakeV.Abstracts;
 
 namespace SnakeV.Core.Bridges
 {
-    /// <summary>
-    /// TODO: Definitely needs some more tidying up
-    /// </summary>
     public class BridgeManager : Singleton<BridgeManager>
     {
         private int _bridgeAmount;
@@ -20,13 +17,6 @@ namespace SnakeV.Core.Bridges
         private WaitForSeconds _bridgeSpawnTime;
         FloorManager _floorManager;
 
-        private void Start()
-        {
-            _bridgeSpawnTime = new WaitForSeconds(GameManager.Instance.BridgeSpawnTime);
-            _floorManager = FloorManager.Instance;
-            AssignTailController();
-        }
-
         public void ConstructBridges()
         {
             SetBridgeAmount();
@@ -36,6 +26,13 @@ namespace SnakeV.Core.Bridges
             SpawnBridges();
         }
 
+        private void Start()
+        {
+            _bridgeSpawnTime = new WaitForSeconds(GameManager.Instance.BridgeSpawnTime);
+            _floorManager = FloorManager.Instance;
+            AssignTailController();
+        }
+
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Space))
@@ -43,6 +40,7 @@ namespace SnakeV.Core.Bridges
                 ConstructBridges();
             }
         }
+
         private void SpawnBridges()
         {
             for (int i = 0; i < bridgePosToSpawn.Count; i++)
@@ -66,8 +64,7 @@ namespace SnakeV.Core.Bridges
             _bridgeAmount = Random.Range(2, Mathf.Min(5, _floorManager.Width));
         }
 
-
-        public bool CheckSuitablePosAndDirection()
+        private bool CheckSuitablePosAndDirection()
         {
             int iterations = 0;
             Vector3 posToSpawn = DetermineSpawnPos.GetEmptySpawnPos(_tailController, _floorManager);

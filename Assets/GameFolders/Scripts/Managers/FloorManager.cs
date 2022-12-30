@@ -13,36 +13,26 @@ namespace SnakeV.Core.Managers
 
         public Tile[,] allTiles;
         private TailController _tailController; //better to make this singleton??
+        private PlayerController _playerController;
         private TileLoader _tileLoader;
+        private int _numberOfLava;
+        private int _maxNumberOfLava = 10;
 
         public int Height => _height;
         public int Width => _width;
         private int _lavaIterations = 0;
+        private int _winScore;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            _tileLoader = new TileLoader(this);
-            _width = _height = PlayerPrefs.GetInt("MapSize");
-            allTiles = new Tile[_width, _height];
-        }
-
-        void Start()
-        {
-            PlayerController.Instance.transform.position = new Vector3(_width / 2, 0.6f, _height / 2); //bad practice to reach this on this way.
-            _tailController = PlayerController.Instance.tailController;
-            StartCoroutine(LavaRoutine());
-        }
-
+        #region Public Methods
         public void CreateFloor(Tile tile)
         {
-            for(int y=0; y<_height; y++)
+            for (int y = 0; y < _height; y++)
             {
-                for(int x=0; x<_width; x++)
+                for (int x = 0; x < _width; x++)
                 {
                     Vector3 posToSpawn = new Vector3(x, 0.55f, y);
                     Tile spawnedTile = Instantiate(tile, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
-                    
+
                     allTiles[x, y] = spawnedTile;
                     spawnedTile.SetTilePos(x, y);
 
@@ -58,7 +48,7 @@ namespace SnakeV.Core.Managers
         {
             Vector3 posToSpawn = Vector3.zero;
 
-            for(int i=-1; i<=_width; i++)
+            for (int i = -1; i <= _width; i++)
             {
                 posToSpawn = new Vector3(i, 0.55f, -1);
                 Instantiate(edge, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
@@ -66,7 +56,7 @@ namespace SnakeV.Core.Managers
                 Instantiate(edge, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
             }
 
-            for(int j=0; j<_height;j++)
+            for (int j = 0; j < _height; j++)
             {
                 posToSpawn = new Vector3(-1, 0.55f, j);
                 Instantiate(edge, posToSpawn, Quaternion.identity, _tilesAndEdges.transform);
@@ -89,7 +79,11 @@ namespace SnakeV.Core.Managers
             }
 
             if (isEmptySpace && !selectedTile.IsFilled)
+            {
                 selectedTile.LavaOn();
+                _numberOfLava++;
+            }
+
             else if (_lavaIterations < 1000)
                 LavaTime();
 
@@ -110,6 +104,51 @@ namespace SnakeV.Core.Managers
             else
                 return true;
         }
+        #endregion
+
+        #region Private Methods
+        protected override void Awake()
+        {
+            base.Awake();
+            InitializeTiles();
+            _winScore = Mathf.FloorToInt(Width * Height * 0.3f); //TODO: will add multipler
+        }
+
+        void Start()
+        {
+            _playerController = PlayerController.Instance;
+            _tailController = PlayerController.Instance.tailController;
+            SetMaximumLavaAmount();
+            SetPlayerStartPos();
+            StartCoroutine(LavaRoutine());
+        }
+
+        private void InitializeTiles()
+        {
+            _tileLoader = new TileLoader(this);
+            if(PlayerPrefs.HasKey("MapSize"))
+            {
+                _width = _height = PlayerPrefs.GetInt("MapSize");
+            }
+            else
+            {
+                _width = 10;
+                _height = 10;
+            }
+       
+            allTiles = new Tile[_width, _height];
+        }
+
+        private void SetMaximumLavaAmount()
+        {
+            _maxNumberOfLava = Mathf.FloorToInt(_width * _height * 0.3f);
+        }
+
+        private void SetPlayerStartPos()
+        {
+            Vector3 playerStartPos = new Vector3(_width / 2, 0.6f, _height / 2);
+            _playerController.SetStartPos(playerStartPos);
+        }
 
         private Tile RandomizeTile()
         {
@@ -121,7 +160,7 @@ namespace SnakeV.Core.Managers
         private IEnumerator LavaRoutine()
         {
             yield return new WaitForSeconds(5f);
-            while(PlayerController.Instance.IsAlive)
+            while(_playerController.IsAlive && _numberOfLava<_maxNumberOfLava)
             {
                 LavaTime();
                 yield return new WaitForSeconds(10f);
@@ -137,6 +176,7 @@ namespace SnakeV.Core.Managers
         {
             _tileLoader.ReleaseMemory();
         }
+        #endregion
     }
 }
 

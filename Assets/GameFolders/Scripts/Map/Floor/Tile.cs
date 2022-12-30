@@ -6,8 +6,9 @@ namespace SnakeV.Core
     public class Tile : MonoBehaviour
     {
         public bool IsFilled => _isFilled;
-        private int xPos, zPos;
+
         private bool _isFilled;
+        private int xPos, zPos;
         private GameObject _lavaObj;
 
         public void SetTilePos(int x, int z)
@@ -39,16 +40,16 @@ namespace SnakeV.Core
             _isFilled = true;
         }
 
-        public void LavaOn()
-        {
-            TileFull();
-            _lavaObj.SetActive(true);
-        }
-
         public void TileEmpty()
         {
             if(_isFilled)
                 _isFilled = false;
+        }
+
+        public void LavaOn()
+        {
+            TileFull();
+            _lavaObj.SetActive(true);
         }
     }
 }

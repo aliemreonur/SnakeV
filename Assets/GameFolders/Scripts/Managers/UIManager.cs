@@ -16,6 +16,17 @@ namespace SnakeV.Core.Managers
         [SerializeField] private GameObject _gameWonPanel;
         [SerializeField] private TextMeshProUGUI _scoreText;
 
+        public void UpdateScore(uint score)
+        {
+            _scoreText.text = score.ToString();
+        }
+
+        public void StartGame()
+        {
+            _introPanel.SetActive(false);
+            GameManager.Instance.StartGame();
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -40,17 +51,6 @@ namespace SnakeV.Core.Managers
         {
             Debug.Log("Game Won"); //no win conditions set just yet
             _gameWonPanel.SetActive(true);
-        }
-
-        public void UpdateScore(uint score)
-        {
-            _scoreText.text = score.ToString();
-        }
-
-        public void StartGame()
-        {
-            _introPanel.SetActive(false);
-            GameManager.Instance.StartGame();
         }
 
         private void OnEnable()

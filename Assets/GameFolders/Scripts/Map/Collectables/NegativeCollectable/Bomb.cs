@@ -15,6 +15,11 @@ public class Bomb : MonoBehaviour
 
     private void Awake()
     {
+        Initialize();
+    }
+
+    private void Initialize()
+    {
         _particleSystem = GetComponentInChildren<ParticleSystem>();
         if (_particleSystem == null)
             Debug.Log("Bomb could not gather the particle system");

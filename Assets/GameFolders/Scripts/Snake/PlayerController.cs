@@ -14,17 +14,17 @@ namespace SnakeV.Core
         public int XPos { get; private set; }
         public int ZPos { get; private set; }
 
+        public uint Score { get; private set; }
         public Vector3 Direction => _currentDirection;
         public Vector3 PreviousPos { get; private set; }
         public IInputConverter InputConverter { get; set; } // => _vectorConverter;
 
         public TailController tailController => _tailController;
 
-        public uint Score { get; private set; }
-
         private Vector3 _currentDirection;
         private WaitForSeconds _movementDelayTime;
         private TailController _tailController;
+        private int _winScore = 10;
 
         void Start()
         {
@@ -32,12 +32,21 @@ namespace SnakeV.Core
             _movementDelayTime = new WaitForSeconds(1-GameManager.Instance.GameSpeed);
             _tailController = new TailController();
             _tailController.tailsList.Add(this);
-
         }
 
         void Update()
         {
             InputConverter.NormalUpdate();
+        }
+
+        public void SetStartPos(Vector3 pos)
+        {
+            transform.position = pos;
+        }
+
+        public void SetWinScore(int value)
+        {
+            _winScore = value;
         }
 
         public void StartMoving()
@@ -64,7 +73,6 @@ namespace SnakeV.Core
             UpdateScore();
         }
 
-
         public void Death()
         {
             IsAlive = false;
@@ -81,11 +89,16 @@ namespace SnakeV.Core
             _tailController.AddTail();
         }
 
-
         private void UpdateScore()
         {
             Score++;
             UIManager.Instance.UpdateScore(Score);
+            if (Score >= _winScore)
+            {
+                GameManager.Instance.GameWon();
+                IsAlive = false;
+            }
+           
         }
 
         private IEnumerator SnakeMoveRoutine()
