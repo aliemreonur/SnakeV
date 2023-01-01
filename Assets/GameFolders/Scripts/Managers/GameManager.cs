@@ -8,15 +8,23 @@ namespace SnakeV.Core.Managers
     public class GameManager : Singleton<GameManager>
     {
         public bool GameRunning { get; private set; }
-        public bool IsEdgesOn;
+        public bool IsEdgesOn => _isEdgesOn;
         public float GameSpeed => _gameSpeed;
         public Action<bool> OnGameWon;
         public Action OnGameStart;
         public int BridgeSpawnTime => _bridgeSpawnTime;
         private int _bridgeSpawnTime = 10;
 
-        [Range(0.5f,0.95f)]
-        [SerializeField] private float _gameSpeed = 0.8f;
+        [Range(10f,100f)]
+        [SerializeField] private int _gameSpeed = 80;
+        private bool _isEdgesOn;
+
+        private void Awake()
+        {
+            base.Awake();
+            SetGameEdges();
+            SetGameSpeed();
+        }
 
         public void StartGame()
         {
@@ -52,12 +60,20 @@ namespace SnakeV.Core.Managers
             PlayerController.Instance.OnPlayerDeath -= GameLost;
         }
 
-        protected void SetGameSpeed()
+        private void SetGameSpeed()
         {
             if (PlayerPrefs.HasKey("GameSpeed"))
-                _gameSpeed = PlayerPrefs.GetFloat("GameSpeed");
+                _gameSpeed = PlayerPrefs.GetInt("GameSpeed");
             else
-                _gameSpeed = 0.8f;
+                _gameSpeed = 75;
+        }
+
+        private void SetGameEdges()
+        {
+            if (PlayerPrefs.HasKey("EdgesOn"))
+                _isEdgesOn = PlayerPrefs.GetInt("EdgesOn") == 1 ? true : false;
+            else
+                _isEdgesOn = true;
         }
 
     }

@@ -19,9 +19,22 @@ namespace SnakeV.Abstracts
         public TileLoader(FloorManager floorManager)
         {
             _floorManager = floorManager;
-            _edgeHandler = Addressables.LoadAssetAsync<GameObject>("Prefabs/Edge");
+            LoadTiles();
+            LoadEdges();
+        }
+
+        private void LoadEdges()
+        {
+            if (GameManager.Instance.IsEdgesOn)
+            {
+                _edgeHandler = Addressables.LoadAssetAsync<GameObject>("Prefabs/Edge");
+                _edgeHandler.Completed += OnEdgeLoaded;
+            }
+        }
+
+        private void LoadTiles()
+        {
             _tileHandler = Addressables.LoadAssetAsync<GameObject>("Prefabs/Tile");
-            _edgeHandler.Completed += OnEdgeLoaded;
             _tileHandler.Completed += OnTileLoad;
         }
 
@@ -49,7 +62,8 @@ namespace SnakeV.Abstracts
         public void ReleaseMemory()
         {
             Addressables.Release(_tileHandler);
-            Addressables.Release(_edgeHandler);
+            if(GameManager.Instance.IsEdgesOn)
+                Addressables.Release(_edgeHandler);
         }
 
     }
