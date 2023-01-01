@@ -14,7 +14,7 @@ namespace SnakeV.Core
         public int XPos { get; private set; }
         public int ZPos { get; private set; }
 
-        public uint Score { get; private set; }
+        public int Score { get; private set; }
         public Vector3 Direction => _currentDirection;
         public Vector3 PreviousPos { get; private set; }
         public IInputConverter InputConverter { get; set; } // => _vectorConverter;
@@ -25,7 +25,7 @@ namespace SnakeV.Core
         private WaitForSeconds _movementDelayTime;
         private TailController _tailController;
         private FloorManager _floorManager;
-        private int _winScore = 10;
+        //private int _winScore = 10;
         private bool _edgesOn;
 
         void Start()
@@ -52,7 +52,7 @@ namespace SnakeV.Core
 
         public void SetWinScore(int value)
         {
-            _winScore = value;
+           // _winScore = value;
         }
 
         public void StartMoving()
@@ -101,11 +101,12 @@ namespace SnakeV.Core
         {
             Score++;
             UIManager.Instance.UpdateScore(Score);
-            if (Score >= _winScore)
+
+            /*if (Score >= _winScore)
             {
                 GameManager.Instance.GameWon();
                 IsAlive = false;
-            }
+            }*/
            
         }
 

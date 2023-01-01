@@ -15,8 +15,9 @@ namespace SnakeV.Core.Managers
         [SerializeField] private GameObject _gameLostPanel;
         [SerializeField] private GameObject _gameWonPanel;
         [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private GameObject _newHighScore;
 
-        public void UpdateScore(uint score)
+        public void UpdateScore(int score)
         {
             _scoreText.text = score.ToString();
         }
@@ -32,6 +33,7 @@ namespace SnakeV.Core.Managers
             base.Awake();
             _gameLostPanel.SetActive(false);
             _gameWonPanel.SetActive(false);
+            _newHighScore.SetActive(false);
         }
 
         private void ActivateEndGamePanel(bool gameWon)
@@ -40,6 +42,7 @@ namespace SnakeV.Core.Managers
                 ActivateWonPanel();
             else
                 ActivateLostPanel();
+            CheckHighestScore();
         }
 
         private void ActivateLostPanel()
@@ -61,6 +64,24 @@ namespace SnakeV.Core.Managers
         private void OnDisable()
         {
             GameManager.Instance.OnGameWon -= ActivateEndGamePanel;
+        }
+
+        private void CheckHighestScore()
+        {
+            int currentScore = PlayerController.Instance.Score;
+
+            if (PlayerPrefs.HasKey("HighestScore"))
+            {
+                int highestScore = PlayerPrefs.GetInt("HighestScore");
+                if (currentScore > highestScore)
+                    _newHighScore.SetActive(true);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("HighestScore", currentScore);
+                _newHighScore.SetActive(true);
+            }
+                
         }
 
     }
