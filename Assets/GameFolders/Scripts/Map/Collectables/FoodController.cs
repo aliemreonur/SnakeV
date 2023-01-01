@@ -26,7 +26,6 @@ namespace SnakeV.Core.Collectables
 
         void Start()
         {
-
             StartCoroutine(LoadAllAssetsByKey());
         }
 

@@ -10,6 +10,7 @@ namespace SnakeV.Core
     public class PlayerController : Singleton<PlayerController>, IControllable, IFollower
     {
         public Action OnPlayerDeath;
+        public Action OnPlayerAte;
         public bool IsAlive { get; private set; }
         public int XPos { get; private set; }
         public int ZPos { get; private set; }
@@ -30,14 +31,17 @@ namespace SnakeV.Core
 
         void Start()
         {
-            _edgesOn = GameManager.Instance.IsEdgesOn;
             InputConverter = new VectorConverter(this);
             _movementDelayTime = new WaitForSeconds(1-(GameManager.Instance.GameSpeed/100));
             _tailController = new TailController();
             _tailController.tailsList.Add(this);
 
             if (!GameManager.Instance.IsEdgesOn)
+            {
+                _edgesOn = GameManager.Instance.IsEdgesOn;
                 _floorManager = FloorManager.Instance;
+            }
+              
         }
 
         void Update()
@@ -77,6 +81,7 @@ namespace SnakeV.Core
 
         public void Ate()
         {
+            OnPlayerAte?.Invoke();
             Grow();
             UpdateScore();
         }
