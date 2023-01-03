@@ -19,7 +19,7 @@ namespace SnakeV.Core.Managers
         [SerializeField] private int _gameSpeed = 80;
         private bool _isEdgesOn;
 
-        private void Awake()
+        private new void Awake()
         {
             base.Awake();
             SetGameEdges();
@@ -68,7 +68,7 @@ namespace SnakeV.Core.Managers
                 _gameSpeed = 75;
         }
 
-        private void SetGameEdges()
+        public void SetGameEdges()
         {
             if (PlayerPrefs.HasKey("EdgesOn"))
                 _isEdgesOn = PlayerPrefs.GetInt("EdgesOn") == 1 ? true : false;

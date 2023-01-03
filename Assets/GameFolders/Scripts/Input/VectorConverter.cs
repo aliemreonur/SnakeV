@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Abstracts;
-using SnakeV.Inputs;
 
-namespace SnakeV.Utilities
+namespace SnakeV.Inputs
 {
     public class VectorConverter : IInputConverter
     {

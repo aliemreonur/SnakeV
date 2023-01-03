@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SnakeV.Utilities;
-using UnityEngine.UI;
-using SnakeV.Core;
-using System;
 using TMPro;
 
 namespace SnakeV.Core.Managers

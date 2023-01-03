@@ -12,22 +12,36 @@ namespace Test.Movements
 {
     public class EditTest
     {
+
+        [Test]
+        public void test_first_up_then_try_down()
+        {
+            IControllable playerController = Substitute.For<IControllable>();
+            IInputConverter vectorConverter = new VectorConverter(playerController);
+            playerController.Direction.Returns(Vector3.forward);
+            IInputReader inputReader = Substitute.For<IInputReader>();
+            vectorConverter.InputReader = inputReader;
+            inputReader.Vertical.Returns(-1);
+            vectorConverter.NormalUpdate();
+
+            Assert.AreEqual(Vector3.forward, vectorConverter.MoveDirection);
+        }
+
+        
         // A Test behaves as an ordinary methods
         [Test]
-        public void TestMoveRight()
+        public void test_first_up_then_direction_right()
         {
-            //player is moving to forward by default. Test will be to right.
-            IControllable _playerController = Substitute.For<IControllable>();
-            IInputConverter _inputConverter = new VectorConverter(_playerController);
-            IInputReader _inputReader = new InputGatherer();
-            
-            _inputReader.Horizontal = 1;
-            _inputConverter.InputReader = _inputReader;
-            _inputReader.Horizontal = 1;
-            _inputConverter.NormalUpdate();
-            _inputConverter.Test();
+            IControllable playerController = Substitute.For<IControllable>();
+            IInputConverter vectorConverter = new VectorConverter(playerController);
+            playerController.Direction.Returns(Vector3.forward);
+            IInputReader inputReader = Substitute.For<IInputReader>();
+            vectorConverter.InputReader = inputReader;
+            inputReader.Horizontal.Returns(1);
+            vectorConverter.NormalUpdate();
 
-            Assert.AreEqual(_inputConverter.MoveDirection, Vector3.right);
+            Assert.AreEqual(Vector3.right, vectorConverter.MoveDirection);
+
         }
 
     }

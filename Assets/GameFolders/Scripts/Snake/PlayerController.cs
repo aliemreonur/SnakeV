@@ -4,6 +4,7 @@ using SnakeV.Abstracts;
 using SnakeV.Utilities;
 using UnityEngine;
 using SnakeV.Core.Managers;
+using SnakeV.Inputs;
 
 namespace SnakeV.Core
 {
@@ -18,7 +19,7 @@ namespace SnakeV.Core
         public int Score { get; private set; }
         public Vector3 Direction => _currentDirection;
         public Vector3 PreviousPos { get; private set; }
-        public IInputConverter InputConverter { get; set; } // => _vectorConverter;
+        public IInputConverter InputConverter { get; set; } 
 
         public TailController tailController => _tailController;
 
@@ -32,16 +33,9 @@ namespace SnakeV.Core
         void Start()
         {
             InputConverter = new VectorConverter(this);
-            _movementDelayTime = new WaitForSeconds(1-(GameManager.Instance.GameSpeed/100));
             _tailController = new TailController();
             _tailController.tailsList.Add(this);
-
-            if (!GameManager.Instance.IsEdgesOn)
-            {
-                _edgesOn = GameManager.Instance.IsEdgesOn;
-                _floorManager = FloorManager.Instance;
-            }
-              
+            SetInitialSettings();
         }
 
         void Update()
@@ -95,6 +89,26 @@ namespace SnakeV.Core
         public void SetDirection()
         {
             _currentDirection = InputConverter.MoveDirection;
+        }
+
+        private void SetInitialSettings()
+        {
+            if (GameManager.Instance != null)
+            {
+                _movementDelayTime = new WaitForSeconds(1 - (GameManager.Instance.GameSpeed / 100));
+
+                if (!GameManager.Instance.IsEdgesOn)
+                {
+                    _edgesOn = GameManager.Instance.IsEdgesOn;
+                    _floorManager = FloorManager.Instance;
+                }
+            }
+
+        }
+
+        private void SetMovementSpeed()
+        {
+
         }
 
         private void Grow()
