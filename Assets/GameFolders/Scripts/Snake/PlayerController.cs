@@ -5,6 +5,7 @@ using SnakeV.Utilities;
 using UnityEngine;
 using SnakeV.Core.Managers;
 using SnakeV.Inputs;
+using SnakeV.Core.Abstracts;
 
 namespace SnakeV.Core
 {
@@ -12,30 +13,47 @@ namespace SnakeV.Core
     {
         public Action OnPlayerDeath;
         public Action OnPlayerAte;
+
         public bool IsAlive { get; private set; }
         public int XPos { get; private set; }
         public int ZPos { get; private set; }
-
         public int Score { get; private set; }
+
         public Vector3 Direction => _currentDirection;
         public Vector3 PreviousPos { get; private set; }
         public IInputConverter InputConverter { get; set; } 
-
         public TailController tailController => _tailController;
+        public PreferenceSetter PreferenceSetter => _preferenceSetter;
 
         private Vector3 _currentDirection;
         private WaitForSeconds _movementDelayTime;
         private TailController _tailController;
         private FloorManager _floorManager;
+        private PreferenceSetter _preferenceSetter;
+
         //private int _winScore = 10;
         private bool _edgesOn;
+        private int _gameSpeed;
 
         void Start()
         {
+            SetGamePreferences();
             InputConverter = new VectorConverter(this);
             _tailController = new TailController();
             _tailController.tailsList.Add(this);
-            SetInitialSettings();
+        }
+
+        private void SetGamePreferences()
+        {
+            _preferenceSetter = new PreferenceSetter();
+            _preferenceSetter.Initialize();
+            _edgesOn = _preferenceSetter.IsEdgesOn;
+            _gameSpeed = _preferenceSetter.GameSpeed;
+            float _delayTime = (100 - _gameSpeed) / 100f;
+            _movementDelayTime = new WaitForSeconds(_delayTime);
+
+            if (!_preferenceSetter.IsEdgesOn)
+                _floorManager = FloorManager.Instance;
         }
 
         void Update()
@@ -89,26 +107,6 @@ namespace SnakeV.Core
         public void SetDirection()
         {
             _currentDirection = InputConverter.MoveDirection;
-        }
-
-        private void SetInitialSettings()
-        {
-            if (GameManager.Instance != null)
-            {
-                _movementDelayTime = new WaitForSeconds(1 - (GameManager.Instance.GameSpeed / 100));
-
-                if (!GameManager.Instance.IsEdgesOn)
-                {
-                    _edgesOn = GameManager.Instance.IsEdgesOn;
-                    _floorManager = FloorManager.Instance;
-                }
-            }
-
-        }
-
-        private void SetMovementSpeed()
-        {
-
         }
 
         private void Grow()

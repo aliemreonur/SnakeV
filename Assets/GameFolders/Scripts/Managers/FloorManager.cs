@@ -2,6 +2,7 @@ using UnityEngine;
 using SnakeV.Abstracts;
 using SnakeV.Utilities;
 using System.Collections;
+using SnakeV.Core.Abstracts;
 
 namespace SnakeV.Core.Managers
 {
@@ -36,7 +37,7 @@ namespace SnakeV.Core.Managers
                     allTiles[x, y] = spawnedTile;
                     spawnedTile.SetTilePos(x, y);
 
-                    if (!GameManager.Instance.IsEdgesOn)
+                    if (!_playerController.PreferenceSetter.IsEdgesOn)
                         continue;
                 }
             }
@@ -107,17 +108,13 @@ namespace SnakeV.Core.Managers
         #endregion
 
         #region Private Methods
-        protected override void Awake()
-        {
-            base.Awake();
-            InitializeTiles();
-            _winScore = Mathf.FloorToInt(Width * Height * 0.3f); //TODO: will add multipler
-        }
 
         void Start()
         {
             _playerController = PlayerController.Instance;
             _tailController = PlayerController.Instance.tailController;
+            InitializeTiles();
+            _winScore = Mathf.FloorToInt(Width * Height * 0.3f); //TODO: will add multipler
             SetMaximumLavaAmount();
             SetPlayerStartPos();
             StartCoroutine(LavaRoutine());

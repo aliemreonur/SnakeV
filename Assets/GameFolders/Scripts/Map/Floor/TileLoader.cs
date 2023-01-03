@@ -4,7 +4,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using SnakeV.Core;
 using SnakeV.Core.Managers;
 
-namespace SnakeV.Abstracts
+namespace SnakeV.Core.Abstracts
 {
     public class TileLoader
     {
@@ -25,7 +25,7 @@ namespace SnakeV.Abstracts
 
         private void LoadEdges()
         {
-            if (GameManager.Instance.IsEdgesOn)
+            if (PlayerController.Instance.PreferenceSetter.IsEdgesOn)
             {
                 _edgeHandler = Addressables.LoadAssetAsync<GameObject>("Prefabs/Edge");
                 _edgeHandler.Completed += OnEdgeLoaded;
@@ -62,7 +62,7 @@ namespace SnakeV.Abstracts
         public void ReleaseMemory()
         {
             Addressables.Release(_tileHandler);
-            if(GameManager.Instance.IsEdgesOn)
+            if(PlayerController.Instance.PreferenceSetter.IsEdgesOn)
                 Addressables.Release(_edgeHandler);
         }
 

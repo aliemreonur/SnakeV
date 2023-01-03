@@ -4,7 +4,7 @@ using SnakeV.Abstracts;
 using DG.Tweening;
 using SnakeV.Core.Managers;
 
-namespace SnakeV.Core
+namespace SnakeV.Core.Abstracts
 {
     public class TailController
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 using SnakeV.Core.Managers;
-using SnakeV.Core;
+using SnakeV.Core.Abstracts;
 
 namespace SnakeV.Utilities
 {

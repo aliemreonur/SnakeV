@@ -4,6 +4,7 @@ using UnityEngine;
 using SnakeV.Utilities;
 using SnakeV.Core.Managers;
 using SnakeV.Abstracts;
+using SnakeV.Core.Abstracts;
 
 namespace SnakeV.Core.Bridges
 {
